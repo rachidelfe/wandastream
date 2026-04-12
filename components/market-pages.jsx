@@ -1,6 +1,7 @@
 import Script from "next/script";
 import Link from "next/link";
-import { LandingTemplate } from "@/components/landing-template";
+import { Brand } from "@/components/brand";
+import { LandingTemplate, RegionalFooter } from "@/components/landing-template";
 import {
   CheckIcon,
   GlobeIcon,
@@ -93,10 +94,7 @@ function RegionShell({ children, region, contactHref, ctaLabel = "Start now", ct
     <>
       <header className="site-header is-scrolled guide-header">
         <div className="container header-inner">
-          <Link className="brand" href={`/${region.slug}`}>
-            <span className="brand-mark" />
-            <span>{siteConfig.name}</span>
-          </Link>
+          <Brand href={`/${region.slug}`} priority />
           <nav className="desktop-nav" aria-label="Regional navigation">
             {links.map((link) => (
               <Link key={link.href} href={link.href}>
@@ -135,17 +133,7 @@ function RegionShell({ children, region, contactHref, ctaLabel = "Start now", ct
 
       {children}
 
-      <footer className="site-footer">
-        <div className="container footer-stack">
-          <div className="footer-inner">
-            <p>Regional guides, device pages, and landing pages now keep visitors inside the same localized path until they choose to exit to the global hub.</p>
-            <a href={contactHref} target="_blank" rel="noreferrer">
-              <SupportIcon />
-              <span>24/7 support</span>
-            </a>
-          </div>
-        </div>
-      </footer>
+      <RegionalFooter region={region} contactHref={contactHref} />
     </>
   );
 }
@@ -503,7 +491,7 @@ export function RegionPage({ region }) {
 
   return (
     <>
-      <LandingTemplate content={buildRegionContent(region)} insideRegion basePath={`/${region.slug}`} contactHref={contactHref} />
+      <LandingTemplate content={buildRegionContent(region)} insideRegion basePath={`/${region.slug}`} contactHref={contactHref} region={region} />
       <JsonLd data={breadcrumbSchema} />
       <JsonLd data={serviceSchema} />
       <JsonLd data={buildFaqSchema(region.faq)} />

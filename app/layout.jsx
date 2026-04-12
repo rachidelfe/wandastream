@@ -31,6 +31,14 @@ export async function generateMetadata() {
       canonical: "/",
       languages: getRootLanguageAlternates()
     },
+    icons: {
+      icon: [
+        { url: "/assets/img/WandaStream-iptv-fabicon.svg", type: "image/svg+xml" },
+        { url: "/assets/img/WandaStream-iptv-fabicon.png", type: "image/png", sizes: "512x512" }
+      ],
+      shortcut: ["/assets/img/WandaStream-iptv-fabicon.png"],
+      apple: [{ url: "/assets/img/WandaStream-iptv-fabicon.png" }]
+    },
     openGraph: {
       type: "website",
       locale: "en_US",

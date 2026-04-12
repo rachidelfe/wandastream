@@ -1,5 +1,6 @@
 import Script from "next/script";
 import Link from "next/link";
+import { Brand } from "@/components/brand";
 import { siteConfig } from "@/lib/site";
 
 export function GuidePage({ guide, slug }) {
@@ -7,10 +8,7 @@ export function GuidePage({ guide, slug }) {
     <>
       <header className="site-header is-scrolled guide-header">
         <div className="container header-inner">
-          <Link className="brand" href="/">
-            <span className="brand-mark" />
-            <span>WandaStream</span>
-          </Link>
+          <Brand priority />
           <nav className="desktop-nav" aria-label="Guide navigation">
             <Link href="/">Home</Link>
             <Link href="/#benefits">Benefits</Link>

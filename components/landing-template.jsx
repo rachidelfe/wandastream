@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { Brand, FooterBrand } from "@/components/brand";
 import { Counter } from "@/components/counter";
 import { FullPricing } from "@/components/full-pricing";
 import { ActivateSubscriptionButton } from "@/components/activate-subscription-button";
@@ -7,9 +8,14 @@ import { LeadCaptureForm } from "@/components/lead-capture-form";
 import { Reveal } from "@/components/reveal";
 import { WhatsAppBubble } from "@/components/whatsapp-bubble";
 import {
+  BoltIcon,
+  CardIcon,
   GlobeIcon,
+  PlayIcon,
   ShieldIcon,
-  SupportIcon
+  SupportIcon,
+  TvIcon,
+  WhatsAppIcon
 } from "@/components/icons";
 import { logoItems, posters } from "@/components/site-data";
 
@@ -189,10 +195,7 @@ function Header({ insideRegion, basePath, pricingHref, contactHref }) {
   return (
     <header className="site-header is-scrolled">
       <div className="container header-inner">
-        <Link className="brand" href={insideRegion ? basePath : "#hero"}>
-          <span className="brand-mark" />
-          <span>WandaStream</span>
-        </Link>
+        <Brand href={insideRegion ? basePath : "#hero"} priority />
 
         <nav className="desktop-nav" aria-label="Primary">
           {links.map((link) => (
@@ -232,14 +235,17 @@ function Header({ insideRegion, basePath, pricingHref, contactHref }) {
 function Footer({ text, showRegionLinks, regions, contactHref }) {
   return (
     <footer className="site-footer">
-      <div className="container footer-stack">
-        <div className="footer-inner">
-          <p>{text}</p>
-          <a href={contactHref} target="_blank" rel="noreferrer">
-            <SupportIcon />
-            <span>24/7 support</span>
-          </a>
-        </div>
+        <div className="container footer-stack">
+          <div className="footer-inner">
+            <div className="footer-brand-block">
+              <FooterBrand />
+              <p>{text}</p>
+            </div>
+            <a href={contactHref} target="_blank" rel="noreferrer">
+              <SupportIcon />
+              <span>24/7 support</span>
+            </a>
+          </div>
 
         {showRegionLinks ? (
           <div className="footer-link-row" aria-label="Regional links">
@@ -255,7 +261,123 @@ function Footer({ text, showRegionLinks, regions, contactHref }) {
   );
 }
 
-export function LandingTemplate({ content, insideRegion = false, basePath = "/", contactHref, regions = [] }) {
+export function RegionalFooter({ region, contactHref }) {
+  const french = ["fr", "ma", "be"].includes(region.slug);
+  const basePath = `/${region.slug}`;
+
+  return (
+    <footer className="site-footer regional-footer">
+      <div className="container footer-stack">
+        <div className="regional-footer-hero guide-card">
+          <div className="regional-footer-copy">
+            <FooterBrand href={basePath} />
+            <span className="eyebrow">{french ? "Marche local" : "Regional market"}</span>
+            <h2>
+              {french
+                ? `${region.shortName} reste dans un parcours plus local et plus clair.`
+                : `${region.shortName} now stays inside a clearer local conversion path.`}
+            </h2>
+            <p>
+              {french
+                ? `Le footer reprend les repères utiles pour ${region.city}, ${region.secondaryCity}, les signaux de confiance, et les liens qui mènent directement vers les tarifs, les guides et le support.`
+                : `This footer keeps the useful local signals for ${region.city}, ${region.secondaryCity}, trust drivers, and the shortest links into pricing, guides, and support.`}
+            </p>
+            <div className="regional-footer-inline">
+              <span className="regional-service-pill">
+                <GlobeIcon />
+                <span>{region.city} + {region.secondaryCity}</span>
+              </span>
+              <span className="regional-service-pill">
+                <CardIcon />
+                <span>{region.currencyLabel}</span>
+              </span>
+              <span className="regional-service-pill">
+                <SupportIcon />
+                <span>{region.languageLabel}</span>
+              </span>
+            </div>
+          </div>
+
+          <div className="regional-footer-side">
+            <div className="footer-link-row">
+              <Link className="footer-chip" href={basePath}>
+                Home
+              </Link>
+              <Link className="footer-chip" href={`${basePath}#pricing`}>
+                Pricing
+              </Link>
+              <Link className="footer-chip" href={`${basePath}/blog`}>
+                Guides
+              </Link>
+              <Link className="footer-chip" href={`${basePath}#library`}>
+                Library
+              </Link>
+            </div>
+            <a className="button button-secondary regional-footer-cta" href={contactHref} target="_blank" rel="noreferrer">
+              Contact support
+            </a>
+          </div>
+        </div>
+
+        <div className="regional-footer-grid">
+          <article className="guide-card regional-footer-card">
+            <span className="eyebrow">{french ? "Contexte" : "Local setup"}</span>
+            <div className="regional-footer-card-head">
+              <span className="feature-icon">
+                <TvIcon />
+              </span>
+              <h3>{region.shortName}</h3>
+            </div>
+            <p className="regional-footer-card-text">
+              {french
+                ? `Repères utiles pour ${region.city}, ${region.secondaryCity}, les paiements ${region.currencyCode} et un support adapte au marché local.`
+                : `Useful local signals for ${region.city}, ${region.secondaryCity}, ${region.currencyCode} context, and market-specific support.`}
+            </p>
+          </article>
+
+          <article className="guide-card regional-footer-card">
+            <span className="eyebrow">{french ? "Focus + confiance" : "Focus + trust"}</span>
+            <div className="regional-footer-card-head">
+              <span className="feature-icon">
+                <ShieldIcon />
+              </span>
+              <h3>{french ? "Ce qui convertit le mieux" : "What converts best in-region"}</h3>
+            </div>
+            <ul className="help-points compact-list">
+              {[...region.providerFocus.slice(0, 2), ...region.trustSignals.slice(0, 2)].map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </article>
+
+          <article className="guide-card regional-footer-card regional-footer-quote">
+            <span className="eyebrow">{french ? "Preuve locale" : "Local proof"}</span>
+            <div className="regional-footer-card-head">
+              <span className="feature-icon">
+                <WhatsAppIcon />
+              </span>
+              <h3>{region.testimonial.name}</h3>
+            </div>
+            <p>"{region.testimonial.quote}"</p>
+            <span className="regional-footer-location">{region.testimonial.location}</span>
+            <div className="regional-footer-service-row">
+              <span className="regional-service-pill">
+                <BoltIcon />
+                <span>{french ? "Activation rapide" : "Fast activation"}</span>
+              </span>
+              <span className="regional-service-pill">
+                <SupportIcon />
+                <span>24/7 support</span>
+              </span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+export function LandingTemplate({ content, insideRegion = false, basePath = "/", contactHref, regions = [], region = null }) {
   const pricingHref = insideRegion ? `${basePath}#pricing` : "#pricing";
   const regionSlug = insideRegion ? basePath.replace(/^\//, "") : "global";
 
@@ -549,7 +671,11 @@ export function LandingTemplate({ content, insideRegion = false, basePath = "/",
         </section>
       </main>
 
-      <Footer text={content.footer.text} showRegionLinks={content.footer.showRegionLinks} regions={regions} contactHref={contactHref} />
+      {insideRegion && region ? (
+        <RegionalFooter region={region} contactHref={contactHref} />
+      ) : (
+        <Footer text={content.footer.text} showRegionLinks={content.footer.showRegionLinks} regions={regions} contactHref={contactHref} />
+      )}
 
       <WhatsAppBubble href={contactHref} label="Contact support" />
     </>

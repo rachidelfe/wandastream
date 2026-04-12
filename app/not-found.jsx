@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Brand, FooterBrand } from "@/components/brand";
 import { GlobeIcon, PlayIcon, ShieldIcon, SupportIcon } from "@/components/icons";
 import { LiveStatus } from "@/components/live-status";
 import { WhatsAppBubble } from "@/components/whatsapp-bubble";
@@ -49,10 +50,7 @@ export default function NotFound() {
 
       <header className="site-header is-scrolled">
         <div className="container header-inner">
-          <Link className="brand" href="/">
-            <span className="brand-mark" />
-            <span>WandaStream</span>
-          </Link>
+          <Brand priority />
 
           <nav className="desktop-nav" aria-label="404 navigation">
             <Link href="/">Home</Link>
@@ -161,7 +159,10 @@ export default function NotFound() {
       <footer className="site-footer">
         <div className="container footer-stack">
           <div className="footer-inner">
-            <p>Continue with the homepage, pricing, or a regional hub without losing the WandaStream flow.</p>
+            <div className="footer-brand-block">
+              <FooterBrand />
+              <p>Continue with the homepage, pricing, or a regional hub without losing the WandaStream flow.</p>
+            </div>
             <a href={whatsappLink} target="_blank" rel="noreferrer">
               <SupportIcon />
               <span>24/7 support</span>
