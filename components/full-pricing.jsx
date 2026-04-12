@@ -1,4 +1,5 @@
 import { CheckIcon } from "@/components/icons";
+import { SecureCheckoutButton } from "@/components/secure-checkout-button";
 import { plans, whatsappLink } from "@/components/site-data";
 
 export function FullPricing({ titleAs: TitleTag = "h2" }) {
@@ -6,7 +7,7 @@ export function FullPricing({ titleAs: TitleTag = "h2" }) {
     <>
       <div className="guide-shell">
         <span className="eyebrow">Pricing</span>
-        <TitleTag>Tarifs VantaStream pour un abonnement IPTV Premium 4K.</TitleTag>
+        <TitleTag>Tarifs WandaStream pour un abonnement IPTV Premium 4K.</TitleTag>
         <p>
           Comparez les durees, les reductions et les options de support avant activation. La formule Gold reste la plus populaire pour un usage
           quotidien stable.
@@ -41,9 +42,12 @@ export function FullPricing({ titleAs: TitleTag = "h2" }) {
                 </li>
               ))}
             </ul>
-            <a className={`button ${plan.popular ? "button-primary" : "button-secondary"}`} href={whatsappLink} target="_blank" rel="noreferrer">
-              {plan.cta}
-            </a>
+            <SecureCheckoutButton
+              className={`button ${plan.popular ? "button-primary" : "button-secondary"}`}
+              fallbackUrl={whatsappLink}
+              label={plan.cta}
+              planId={plan.title}
+            />
           </article>
         ))}
       </div>

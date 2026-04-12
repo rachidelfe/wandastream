@@ -282,9 +282,13 @@ export const deviceBadges = [
   "Android",
   "iPhone / iPad",
   "Android TV",
-  "Smart TV",
+  "Samsung Tizen",
+  "LG webOS",
   "Fire TV Stick",
-  "MAG",
+  "Google TV Streamer",
+  "Xiaomi Box",
+  "NVIDIA Shield",
+  "MAG Box",
   "Apple TV",
   "Windows",
   "macOS",
@@ -305,7 +309,7 @@ export const faqItems = [
   {
     question: "Which devices are supported?",
     answer:
-      "The service works across Smart TVs, Android and iOS devices, Fire TV, MAG boxes, Windows, macOS, and most IPTV player apps that support Xtream Codes or M3U playlists."
+      "The service works across Firestick, Apple TV, Google TV Streamer, Samsung Tizen, LG webOS, Xiaomi Box, Android TV, NVIDIA Shield, MAG boxes, iOS, Windows, macOS, and most IPTV apps that support Xtream Codes or M3U playlists."
   },
   {
     question: "How many connections can I use?",

@@ -2,6 +2,7 @@ import { Inter, Sora } from "next/font/google";
 import "./globals.css";
 import { getRootLanguageAlternates } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
+import { assertZeroLeakEnvironment } from "@/lib/dal/env";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -16,13 +17,13 @@ const sora = Sora({
 });
 
 export async function generateMetadata() {
-  const title = "Best IPTV Service, Regional Setup Guides, and Premium 4K Streaming | VantaStream";
+  const title = "Best IPTV Service, Regional Setup Guides, and Premium 4K Streaming | WandaStream";
 
   return {
     metadataBase: new URL(siteConfig.siteUrl),
     title: {
       default: title,
-      template: "%s | VantaStream"
+      template: "%s | WandaStream"
     },
     description: siteConfig.description,
     keywords: siteConfig.keywords,
@@ -42,7 +43,7 @@ export async function generateMetadata() {
           url: "/hero.webp",
           width: 1440,
           height: 820,
-          alt: "Abonnement IPTV Premium VantaStream avec streaming 4K sans coupure"
+          alt: "Abonnement IPTV Premium WandaStream avec streaming 4K sans coupure"
         }
       ]
     },
@@ -67,6 +68,8 @@ export async function generateMetadata() {
 }
 
 export default function RootLayout({ children }) {
+  assertZeroLeakEnvironment();
+
   return (
     <html lang="en">
       <body className={`${inter.variable} ${sora.variable}`}>{children}</body>

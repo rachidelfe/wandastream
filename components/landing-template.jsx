@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Counter } from "@/components/counter";
 import { FullPricing } from "@/components/full-pricing";
 import { ActivateSubscriptionButton } from "@/components/activate-subscription-button";
-import { LiveStatus } from "@/components/live-status";
+import { LeadCaptureForm } from "@/components/lead-capture-form";
 import { Reveal } from "@/components/reveal";
 import { WhatsAppBubble } from "@/components/whatsapp-bubble";
 import {
@@ -63,7 +63,7 @@ function HeroShowcase() {
       <div className="hero-media-frame">
         <Image
           src="/hero.webp"
-          alt="Interface VantaStream montrant une experience IPTV premium avec cinema, sport et streaming 4K"
+          alt="Interface WandaStream montrant une experience IPTV premium avec cinema, sport et streaming 4K"
           width={1440}
           height={820}
           priority
@@ -188,17 +188,10 @@ function Header({ insideRegion, basePath, pricingHref, contactHref }) {
 
   return (
     <header className="site-header is-scrolled">
-      <div className="status-strip">
-        <div className="container status-strip-inner">
-          <LiveStatus />
-          <div className="status-copy">Activation instantanee, paiement securise et surveillance active aujourd&apos;hui.</div>
-        </div>
-      </div>
-
       <div className="container header-inner">
         <Link className="brand" href={insideRegion ? basePath : "#hero"}>
           <span className="brand-mark" />
-          <span>VantaStream</span>
+          <span>WandaStream</span>
         </Link>
 
         <nav className="desktop-nav" aria-label="Primary">
@@ -210,16 +203,14 @@ function Header({ insideRegion, basePath, pricingHref, contactHref }) {
         </nav>
 
         <ActivateSubscriptionButton className="button button-primary header-cta" href={pricingHref} label="Start now" />
-      </div>
 
-      <details className="mobile-nav-shell">
-        <summary className="mobile-menu-toggle" aria-label="Toggle navigation">
-          <span />
-          <span />
-          <span />
-        </summary>
-        <div className="mobile-nav-wrap">
-          <div className="container">
+        <details className="mobile-nav-shell">
+          <summary className="mobile-menu-toggle" aria-label="Toggle navigation">
+            <span />
+            <span />
+            <span />
+          </summary>
+          <div className="mobile-nav-wrap">
             <nav className="mobile-nav" aria-label="Mobile">
               {links.map((link) => (
                 <Link key={link.href} href={link.href}>
@@ -232,8 +223,8 @@ function Header({ insideRegion, basePath, pricingHref, contactHref }) {
               </a>
             </nav>
           </div>
-        </div>
-      </details>
+        </details>
+      </div>
     </header>
   );
 }
@@ -266,6 +257,7 @@ function Footer({ text, showRegionLinks, regions, contactHref }) {
 
 export function LandingTemplate({ content, insideRegion = false, basePath = "/", contactHref, regions = [] }) {
   const pricingHref = insideRegion ? `${basePath}#pricing` : "#pricing";
+  const regionSlug = insideRegion ? basePath.replace(/^\//, "") : "global";
 
   return (
     <>
@@ -281,7 +273,7 @@ export function LandingTemplate({ content, insideRegion = false, basePath = "/",
               </div>
 
               <h1>
-                <span className="hero-brand-line">VantaStream</span>
+                <span className="hero-brand-line">WandaStream</span>
                 <span>{content.hero.title}</span>
               </h1>
               <p>{content.hero.intro}</p>
@@ -534,19 +526,23 @@ export function LandingTemplate({ content, insideRegion = false, basePath = "/",
         <section className="section deferred-section" id="contact">
           <div className="container">
             <Reveal>
-              <div className="final-cta">
-                <div className="cta-glow" />
-                <span className="eyebrow">{content.contact.eyebrow}</span>
-                <h2>{content.contact.title}</h2>
-                <p>{content.contact.text}</p>
-                <div className="hero-actions">
-                  <a className="button button-primary" href={contactHref} target="_blank" rel="noreferrer">
-                    Contact support
-                  </a>
-                  <Link className="button button-secondary" href={pricingHref}>
-                    View plans
-                  </Link>
+              <div className="contact-panel-grid two-column-grid">
+                <div className="final-cta contact-panel-copy">
+                  <div className="cta-glow" />
+                  <span className="eyebrow">{content.contact.eyebrow}</span>
+                  <h2>{content.contact.title}</h2>
+                  <p>{content.contact.text}</p>
+                  <div className="hero-actions">
+                    <a className="button button-primary" href={contactHref} target="_blank" rel="noreferrer">
+                      Contact support
+                    </a>
+                    <Link className="button button-secondary" href={pricingHref}>
+                      View plans
+                    </Link>
+                  </div>
                 </div>
+
+                <LeadCaptureForm fallbackUrl={contactHref} regionSlug={regionSlug} />
               </div>
             </Reveal>
           </div>

@@ -7,7 +7,7 @@ export async function generateMetadata() {
   return {
     title: "Bibliotheque IPTV Films et Series",
     description:
-      "Explorez la bibliotheque VantaStream avec cinema, sport, series et contenu familial en streaming IPTV Premium 4K.",
+      "Explorez la bibliotheque WandaStream avec cinema, sport, series et contenu familial en streaming IPTV Premium 4K.",
     alternates: {
       canonical: `${siteConfig.siteUrl}/library`
     }
@@ -21,7 +21,7 @@ export default function LibraryPage() {
         <div className="container">
           <div className="guide-shell">
             <span className="eyebrow">Library</span>
-            <h1>Bibliotheque VantaStream: films, series, sport et contenu familial.</h1>
+            <h1>Bibliotheque WandaStream: films, series, sport et contenu familial.</h1>
             <p>
               Une vitrine dediee a la bibliotheque permet a Google et aux visiteurs de comprendre plus vite la richesse du catalogue et la qualite du
               streaming.

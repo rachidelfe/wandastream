@@ -5,7 +5,7 @@ export async function generateMetadata() {
   return {
     title: "Tarifs IPTV Premium 4K",
     description:
-      "Comparez les offres Bronze, Silver, Gold et Diamond de VantaStream pour un abonnement IPTV Premium 4K sans coupure.",
+      "Comparez les offres Bronze, Silver, Gold et Diamond de WandaStream pour un abonnement IPTV Premium 4K sans coupure.",
     alternates: {
       canonical: `${siteConfig.siteUrl}/pricing`
     }

@@ -1,3 +1,4 @@
+import Script from "next/script";
 import { faqItems, plans, testimonials } from "@/components/site-data";
 import { regionCatalog } from "@/lib/market-data";
 import { siteConfig } from "@/lib/site";
@@ -23,7 +24,7 @@ export function StructuredData() {
     },
     category: "Abonnement IPTV Premium",
     image: [`${siteConfig.siteUrl}/hero.webp`, `${siteConfig.siteUrl}/pricing-showcase.webp`],
-    sku: "VANTASTREAM-GOLD-12M",
+    sku: "WANDASTREAM-GOLD-12M",
     aggregateRating: {
       "@type": "AggregateRating",
       ratingValue: siteConfig.ratingValue,
@@ -116,7 +117,7 @@ export function StructuredData() {
   const areaServedSchema = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: "VantaStream regional landing pages",
+    name: "WandaStream regional landing pages",
     itemListElement: regionCatalog.map((region, index) => ({
       "@type": "ListItem",
       position: index + 1,
@@ -127,27 +128,33 @@ export function StructuredData() {
 
   return (
     <>
-      <script
+      <Script
+        id="website-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
       />
-      <script
+      <Script
+        id="product-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
       />
-      <script
+      <Script
+        id="subscription-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(subscriptionSchema) }}
       />
-      <script
+      <Script
+        id="review-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }}
       />
-      <script
+      <Script
+        id="faq-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
-      <script
+      <Script
+        id="area-served-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(areaServedSchema) }}
       />

@@ -1,3 +1,4 @@
+import Script from "next/script";
 import Link from "next/link";
 import { LandingTemplate } from "@/components/landing-template";
 import {
@@ -32,7 +33,9 @@ import {
 import { siteConfig } from "@/lib/site";
 
 function JsonLd({ data }) {
-  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
+  const type = String(data["@type"] ?? "jsonld").toLowerCase().replace(/[^a-z0-9]+/g, "-");
+  const id = `jsonld-${type}-${JSON.stringify(data).length}`;
+  return <Script id={id} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
 }
 
 function SectionIntro({ eyebrow, title, text }) {
@@ -42,6 +45,18 @@ function SectionIntro({ eyebrow, title, text }) {
       <h2>{title}</h2>
       <p>{text}</p>
     </div>
+  );
+}
+
+function StickyGuideFilters({ items }) {
+  return (
+    <nav className="guide-filter-nav" aria-label="Guide filters">
+      {items.map((item) => (
+        <Link className="guide-filter-chip" href={`#${item.slug}`} key={item.slug}>
+          {item.label}
+        </Link>
+      ))}
+    </nav>
   );
 }
 
@@ -92,6 +107,29 @@ function RegionShell({ children, region, contactHref, ctaLabel = "Start now", ct
           <Link className="button button-primary header-cta" href={ctaHref}>
             {ctaLabel}
           </Link>
+
+          <details className="mobile-nav-shell">
+            <summary className="mobile-menu-toggle" aria-label="Toggle navigation">
+              <span />
+              <span />
+              <span />
+            </summary>
+            <div className="mobile-nav-wrap">
+              <nav className="mobile-nav" aria-label="Regional mobile navigation">
+                {links.map((link) => (
+                  <Link key={link.href} href={link.href}>
+                    {link.label}
+                  </Link>
+                ))}
+                <Link className="button button-primary mobile-nav-cta" href={ctaHref}>
+                  {ctaLabel}
+                </Link>
+                <a className="button button-secondary mobile-nav-cta" href={contactHref} target="_blank" rel="noreferrer">
+                  Contact support
+                </a>
+              </nav>
+            </div>
+          </details>
         </div>
       </header>
 
@@ -659,76 +697,55 @@ export function RegionGuidesIndexPage({ region }) {
     <RegionShell region={region} contactHref={contactHref} ctaHref={`/${region.slug}#pricing`}>
       <main className="guide-page market-page">
         <section className="section guide-hero">
-          <div className="container market-hero-grid">
-            <div className="guide-shell market-copy">
+          <div className="container">
+            <div className="guide-shell market-copy guide-hero-single">
               <span className="eyebrow">Guides</span>
               <h1>
                 {french ? `Guides IPTV regionaux pour ${region.name}` : `Regional IPTV guides for ${region.name}`}
               </h1>
               <p>
                 {french
-                  ? `Cette page capte la longue traine locale autour des appareils, des grands evenements, des comparatifs et des problemes frequents, puis renvoie vers la page ${region.shortName}, les pages appareil et la section tarifs.`
-                  : `This guides hub captures local long-tail searches around devices, premium events, comparisons, and problem-solving queries, then routes that traffic into the ${region.shortName} landing page, device pages, and pricing.`}
+                  ? `Trouvez rapidement le bon guide pour les appareils, les grands evenements, les comparatifs et les problemes frequents, puis passez vers la page ${region.shortName}, les pages appareil ou les tarifs.`
+                  : `Find the right guide fast for devices, premium events, comparisons, and streaming fixes, then move directly into the ${region.shortName} page, device routes, or pricing.`}
               </p>
 
-              <div className="market-meta-row">
-                <span className="market-chip">{posts.length} guides</span>
-                <span className="market-chip">{categoryCount} categories</span>
-                <span className="market-chip">{region.city}</span>
-              </div>
+              <div className="guide-hero-meta-row">
+                <div className="market-meta-row guide-meta-tags">
+                  <span className="market-chip">{region.shortName}</span>
+                  <span className="market-chip">{posts.length} guides</span>
+                  <span className="market-chip">{categoryCount} categories</span>
+                </div>
 
-              <div className="hero-actions">
-                <Link className="button button-primary" href={`/${region.slug}`}>
-                  Home
-                </Link>
-                <Link className="button button-secondary" href={`/${region.slug}#pricing`}>
-                  View pricing
-                </Link>
-                <a className="button button-secondary" href={contactHref} target="_blank" rel="noreferrer">
-                  Contact support
-                </a>
+                <div className="hero-actions guide-hero-actions">
+                  <Link className="button button-primary" href={`/${region.slug}`}>
+                    Start now
+                  </Link>
+                  <Link className="button button-secondary" href={`/${region.slug}#pricing`}>
+                    View pricing
+                  </Link>
+                </div>
               </div>
             </div>
+          </div>
+        </section>
 
-            <div className="guide-card market-proof-panel">
-              <span className="eyebrow">Guides strategy</span>
-              <h3>
-                {french ? "Chaque guide doit mener vers l'action." : "Every guide should end in action."}
-              </h3>
-              <ul className="feature-list compact-list">
-                <li>
-                  <span className="check-badge">
-                    <CheckIcon />
-                  </span>
-                  <span>
-                    {french ? "Chaque article renvoie vers la page regionale." : "Every article links back to the regional landing page."}
-                  </span>
-                </li>
-                <li>
-                  <span className="check-badge">
-                    <CheckIcon />
-                  </span>
-                  <span>
-                    {french ? "Les guides appareil restent lies au meme environnement local." : "Device guides stay tied to the same regional environment."}
-                  </span>
-                </li>
-                <li>
-                  <span className="check-badge">
-                    <CheckIcon />
-                  </span>
-                  <span>
-                    {french ? "La section tarifs et le support restent visibles jusqu'au bout." : "Pricing and support remain visible all the way through the funnel."}
-                  </span>
-                </li>
-              </ul>
-            </div>
+        <section className="section section-tight guide-filter-strip">
+          <div className="container">
+            <StickyGuideFilters
+              items={[
+                { slug: "high-intent", label: "High-Intent" },
+                { slug: "events", label: "Events" },
+                { slug: "comparison", label: "Comparison" },
+                { slug: "fix-issues", label: "Fix Issues" }
+              ]}
+            />
           </div>
         </section>
 
         {groupedPosts
           .filter((group) => group.posts.length > 0)
           .map((group) => (
-            <section className="section deferred-section" key={group.slug}>
+            <section className="section deferred-section" id={group.slug} key={group.slug}>
               <div className="container">
                 <SectionIntro
                   eyebrow="Guides"
@@ -746,7 +763,7 @@ export function RegionGuidesIndexPage({ region }) {
                         <span className="market-chip">{post.keyword}</span>
                       </div>
                       <Link className="help-link" href={`/${region.slug}/blog/${post.slug}`}>
-                        {french ? "Lire le guide" : "Read guide"}
+                        {french ? "Voir le guide ->" : "View guide ->"}
                       </Link>
                     </article>
                   ))}
@@ -823,61 +840,63 @@ export function RegionGuidePostPage({ region, post }) {
     <RegionShell region={region} contactHref={contactHref} ctaHref={`/${region.slug}#pricing`}>
       <main className="guide-page market-page">
         <section className="section guide-hero">
-          <div className="container market-hero-grid">
-            <div className="guide-shell market-copy">
+          <div className="container">
+            <div className="guide-shell market-copy guide-hero-single">
               <span className="eyebrow">Guides</span>
               <h1>{post.title}</h1>
               <p>{post.intro}</p>
 
-              <div className="market-meta-row">
-                <span className="market-chip">{post.categoryLabel}</span>
-                <span className="market-chip">{post.keyword}</span>
-                {relatedDevices.map((device) => (
-                  <span className="market-chip" key={device.slug}>
-                    {device.name}
-                  </span>
-                ))}
-              </div>
+              <div className="guide-hero-meta-row">
+                <div className="market-meta-row guide-meta-tags">
+                  <span className="market-chip">{region.shortName}</span>
+                  <span className="market-chip">{post.categoryLabel}</span>
+                  <span className="market-chip">{post.keyword}</span>
+                  {relatedDevices.map((device) => (
+                    <span className="market-chip" key={device.slug}>
+                      {device.name}
+                    </span>
+                  ))}
+                </div>
 
-              <div className="hero-actions">
-                <Link className="button button-primary" href={`/${region.slug}`}>
-                  Home
-                </Link>
-                <Link className="button button-secondary" href={`/${region.slug}#pricing`}>
-                  View pricing
-                </Link>
-                <a className="button button-secondary" href={contactHref} target="_blank" rel="noreferrer">
-                  Contact support
-                </a>
+                <div className="hero-actions guide-hero-actions">
+                  <Link className="button button-primary" href={`/${region.slug}`}>
+                    Start now
+                  </Link>
+                  <Link className="button button-secondary" href={`/${region.slug}#pricing`}>
+                    View pricing
+                  </Link>
+                </div>
               </div>
             </div>
+          </div>
+        </section>
 
-            <div className="guide-card market-proof-panel">
-              <span className="eyebrow">SEO path</span>
-              <h3>
-                {french ? "Chaque guide doit finir dans le tunnel regional." : "Every guide should end inside the regional funnel."}
-              </h3>
-              <p>{post.categoryDescription}</p>
-              <ul className="feature-list compact-list">
-                <li>
-                  <span className="check-badge">
-                    <CheckIcon />
-                  </span>
-                  <span>{french ? "Page regionale liee directement." : "Regional page linked directly from the article."}</span>
-                </li>
-                <li>
-                  <span className="check-badge">
-                    <CheckIcon />
-                  </span>
-                  <span>{french ? "Pages appareil reliees au sujet." : "Device pages linked to the article topic."}</span>
-                </li>
-                <li>
-                  <span className="check-badge">
-                    <CheckIcon />
-                  </span>
-                  <span>{french ? "Tarifs et support toujours visibles." : "Pricing and support remain visible throughout."}</span>
-                </li>
-              </ul>
+        <section className="section section-tight">
+          <div className="container">
+            <div className="guide-quick-solution guide-card">
+              <span className="eyebrow">{french ? "Reponse rapide" : "Quick solution"}</span>
+              <h2>
+                {french ? "Le chemin le plus simple vers une lecture stable." : "The fastest route to stable streaming."}
+              </h2>
+              <div className="guide-highlight-list guide-highlight-grid">
+                <div className="guide-highlight">
+                  <span className="guide-bullet-dot" />
+                  <span>{french ? `Fonctionne pour ${region.shortName}` : `Works in ${region.shortName}`}</span>
+                </div>
+                <div className="guide-highlight">
+                  <span className="guide-bullet-dot" />
+                  <span>{french ? "Compatible avec les appareils lies" : "Compatible with linked devices"}</span>
+                </div>
+                <div className="guide-highlight">
+                  <span className="guide-bullet-dot" />
+                  <span>{french ? "Concu pour limiter le buffering" : "Built to reduce buffering"}</span>
+                </div>
+              </div>
+              <div className="hero-actions">
+                <Link className="button button-primary" href={`/${region.slug}#pricing`}>
+                  Start now
+                </Link>
+              </div>
             </div>
           </div>
         </section>
@@ -908,6 +927,32 @@ export function RegionGuidePostPage({ region, post }) {
                 ) : null}
               </article>
             ))}
+          </div>
+        </section>
+
+        <section className="section deferred-section">
+          <div className="container">
+            <div className="guide-card guide-mid-cta">
+              <span className="eyebrow">{french ? "Etape suivante" : "Next step"}</span>
+              <h2>
+                {french
+                  ? "Passez de la lecture a une offre adaptee a votre appareil."
+                  : "Move from research into the plan that fits your setup."}
+              </h2>
+              <p>
+                {french
+                  ? "Vous avez l'essentiel. La meilleure suite consiste a verifier l'appareil, puis a passer aux tarifs ou au support."
+                  : "You have the core answer. The best next move is to confirm the device path, then step into pricing or support."}
+              </p>
+              <div className="hero-actions">
+                <Link className="button button-primary" href={`/${region.slug}#pricing`}>
+                  View pricing
+                </Link>
+                <a className="button button-secondary" href={contactHref} target="_blank" rel="noreferrer">
+                  Contact support
+                </a>
+              </div>
+            </div>
           </div>
         </section>
 

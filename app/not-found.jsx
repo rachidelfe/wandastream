@@ -16,7 +16,7 @@ export const metadata = {
 const recoveryCards = [
   {
     title: "Return to the homepage",
-    text: "Go back to the main VantaStream experience and continue from the global hub.",
+    text: "Go back to the main WandaStream experience and continue from the global hub.",
     href: "/",
     icon: GlobeIcon,
     kind: "internal"
@@ -51,7 +51,7 @@ export default function NotFound() {
         <div className="container header-inner">
           <Link className="brand" href="/">
             <span className="brand-mark" />
-            <span>VantaStream</span>
+            <span>WandaStream</span>
           </Link>
 
           <nav className="desktop-nav" aria-label="404 navigation">
@@ -161,7 +161,7 @@ export default function NotFound() {
       <footer className="site-footer">
         <div className="container footer-stack">
           <div className="footer-inner">
-            <p>Continue with the homepage, pricing, or a regional hub without losing the VantaStream flow.</p>
+            <p>Continue with the homepage, pricing, or a regional hub without losing the WandaStream flow.</p>
             <a href={whatsappLink} target="_blank" rel="noreferrer">
               <SupportIcon />
               <span>24/7 support</span>

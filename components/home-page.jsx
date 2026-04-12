@@ -118,7 +118,7 @@ function globalContent() {
       text: "Speak to the team, confirm device compatibility, and get the right plan for your setup without delays."
     },
     footer: {
-      text: "VantaStream now includes a global pillar homepage, regional landing pages, device setup routes, and content clusters built to rank and convert together.",
+      text: "WandaStream now includes a global pillar homepage, regional landing pages, device setup routes, and content clusters built to rank and convert together.",
       showRegionLinks: true
     }
   };

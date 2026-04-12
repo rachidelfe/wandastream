@@ -1,3 +1,4 @@
+import Script from "next/script";
 import Link from "next/link";
 import { siteConfig } from "@/lib/site";
 
@@ -8,7 +9,7 @@ export function GuidePage({ guide, slug }) {
         <div className="container header-inner">
           <Link className="brand" href="/">
             <span className="brand-mark" />
-            <span>VantaStream</span>
+            <span>WandaStream</span>
           </Link>
           <nav className="desktop-nav" aria-label="Guide navigation">
             <Link href="/">Home</Link>
@@ -86,7 +87,8 @@ export function GuidePage({ guide, slug }) {
         </div>
       </section>
 
-      <script
+      <Script
+        id={`guide-schema-${slug}`}
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
