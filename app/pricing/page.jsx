@@ -1,25 +1,11 @@
-import { FullPricing } from "@/components/full-pricing";
-import { siteConfig } from "@/lib/site";
+import { redirect } from "next/navigation";
 
-export async function generateMetadata() {
-  return {
-    title: "Tarifs IPTV Premium 4K",
-    description:
-      "Comparez les offres Bronze, Silver, Gold et Diamond de WandaStream pour un abonnement IPTV Premium 4K sans coupure.",
-    alternates: {
-      canonical: `${siteConfig.siteUrl}/pricing`
-    }
-  };
-}
+export const metadata = {
+  title: "Tarifs abonnement IPTV France | WandaStream",
+  description:
+    "Comparez les offres WandaStream de 1 mois, 3 mois, 6 mois ou annuel pour regarder chaînes françaises, sport, films et séries."
+};
 
 export default function PricingPage() {
-  return (
-    <main className="guide-page">
-      <section className="section">
-        <div className="container">
-          <FullPricing titleAs="h1" />
-        </div>
-      </section>
-    </main>
-  );
+  redirect("/#pricing");
 }

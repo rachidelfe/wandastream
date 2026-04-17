@@ -12,7 +12,7 @@ export function LiveStatus() {
   return (
     <div className="system-status">
       <span className="status-dot" />
-      <span>Tous les systemes operationnels</span>
+      <span>Service disponible</span>
       <time dateTime={now.toISOString()}>Actif aujourd&apos;hui · {timestamp}</time>
     </div>
   );

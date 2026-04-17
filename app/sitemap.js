@@ -1,37 +1,31 @@
-import { deviceCatalog, regionCatalog } from "@/lib/market-data";
-import { guideCatalog } from "@/lib/regional-guides";
-import { siteConfig } from "@/lib/site";
+import { deviceCatalog } from "@/lib/france-data";
+import { guideCatalog } from "@/lib/france-guides";
 
 export default function sitemap() {
-  const staticRoutes = ["", "/pricing", "/library", "/iptv-firestick-setup", "/fix-iptv-buffering", "/best-vpn-for-iptv"];
-  const regionRoutes = regionCatalog.flatMap((region) => [
-    `/${region.slug}`,
-    `/${region.slug}/blog`,
-    ...deviceCatalog.map((device) => `/${region.slug}/${device.slug}`)
-  ]);
-  const guideRoutes = guideCatalog.map((post) => `/${post.region}/blog/${post.slug}`);
-  const routes = [...staticRoutes, ...regionRoutes, ...guideRoutes];
+  const baseUrl = "https://www.wandastream.com";
+  const lastmod = new Date();
 
-  return routes.map((route) => ({
-    url: `${siteConfig.siteUrl}${route}`,
-    lastModified: new Date(),
-    changeFrequency:
-      route === ""
-        ? "weekly"
-        : route.includes("/blog/")
-          ? "monthly"
-          : route.endsWith("/blog") || route === "/pricing" || route === "/library"
-            ? "weekly"
-            : "monthly",
-    priority:
-      route === ""
-        ? 1
-        : route === "/pricing" || route === "/library"
-          ? 0.88
-          : regionCatalog.some((region) => route === `/${region.slug}`)
-            ? 0.84
-            : route.includes("/blog/")
-              ? 0.68
-              : 0.74
+  const staticEntries = [
+    { url: baseUrl, lastModified: lastmod, changeFrequency: "daily", priority: 1 },
+    { url: `${baseUrl}/guides`, lastModified: lastmod, changeFrequency: "daily", priority: 0.95 },
+    { url: `${baseUrl}/devices`, lastModified: lastmod, changeFrequency: "weekly", priority: 0.95 },
+    { url: `${baseUrl}/pricing`, lastModified: lastmod, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${baseUrl}/library`, lastModified: lastmod, changeFrequency: "weekly", priority: 0.85 }
+  ];
+
+  const deviceEntries = deviceCatalog.map((device) => ({
+    url: `${baseUrl}/devices/${device.routeSlug}`,
+    lastModified: lastmod,
+    changeFrequency: "monthly",
+    priority: ["firestick-france", "smart-tv-france"].includes(device.routeSlug) ? 0.85 : 0.8
   }));
+
+  const guideEntries = guideCatalog.map((post) => ({
+    url: `${baseUrl}/guides/${post.slug}`,
+    lastModified: lastmod,
+    changeFrequency: post.category === "events" ? "weekly" : "monthly",
+    priority: post.category === "events" ? 0.85 : 0.8
+  }));
+
+  return [...staticEntries, ...deviceEntries, ...guideEntries];
 }

@@ -8,110 +8,112 @@ import {
   SupportIcon,
   TvIcon
 } from "@/components/icons";
+import { createWhatsAppLink } from "@/lib/whatsapp";
 
 export const navLinks = [
-  { label: "Home", href: "#hero" },
-  { label: "Benefits", href: "#benefits" },
-  { label: "Library", href: "#library" },
-  { label: "Pricing", href: "#pricing" },
+  { label: "Accueil", href: "#hero" },
+  { label: "Avantages", href: "#benefits" },
+  { label: "Films & séries", href: "#library" },
+  { label: "Tarifs", href: "#pricing" },
   { label: "FAQ", href: "#faq" },
   { label: "Contact", href: "#contact" }
 ];
 
 export const heroDevices = [
   { label: "Smart TV", icon: TvIcon },
-  { label: "Android", icon: PhoneIcon },
-  { label: "iOS", icon: PhoneIcon }
+  { label: "Firestick", icon: TvIcon },
+  { label: "Android TV", icon: TvIcon },
+  { label: "iPhone", icon: PhoneIcon }
 ];
 
 export const trustItems = [
-  { value: "+7,000", label: "active users" },
-  { value: "99.99%", label: "uptime" },
-  { value: "<5 min", label: "instant activation" },
-  { value: "24/7", label: "support team" }
+  { value: "TF1 à Canal+", label: "chaînes françaises et sport" },
+  { value: "HD / 4K", label: "selon la chaîne et l'appareil" },
+  { value: "Smart TV", label: "Samsung, LG, Android TV, Firestick" },
+  { value: "7j/7", label: "aide simple sur WhatsApp" },
+  { value: "Rapide", label: "mise en route sans détour" }
 ];
 
 export const bentoCards = [
   {
-    title: "4K streaming tuned for prime-time reliability",
-    text: "Optimized playback keeps premium sports, movies, and live channels crisp across the busiest viewing windows.",
-    icon: SparkIcon,
+    title: "Chaînes françaises et sport en direct",
+    text: "Retrouvez TF1, France 2, M6, Canal+, beIN Sports et d'autres chaînes dans une offre claire.",
+    icon: PlayIcon,
     className: "is-large"
   },
   {
-    title: "24/7 human support",
-    text: "Fast setup help, renewals, and troubleshooting handled by a real support workflow.",
-    icon: SupportIcon,
-    className: "is-small"
-  },
-  {
-    title: "Multi-device access",
-    text: "Smart TV, mobile, desktop, MAG, Fire TV, and browser players all covered in one ecosystem.",
-    icon: TvIcon,
+    title: "Films et séries à regarder quand vous voulez",
+    text: "Passez du direct aux films, aux séries et aux programmes famille sans changer d'application.",
+    icon: SparkIcon,
     className: "is-tall"
   },
   {
-    title: "Anti-freeze delivery",
-    text: "Stability layers are designed to reduce buffering and protect the viewing experience during peak hours.",
-    icon: ShieldIcon,
+    title: "Compatible avec les appareils les plus utilisés",
+    text: "Smart TV Samsung et LG, Firestick, Android TV, iPhone, Android, PC et Mac.",
+    icon: TvIcon,
     className: "is-wide"
+  },
+  {
+    title: "Activation rapide avec aide sur WhatsApp",
+    text: "On vous aide à choisir l'offre et l'application adaptée à votre appareil avant de commencer.",
+    icon: SupportIcon
   }
 ];
 
 export const logoItems = [
   {
     name: "Netflix",
-    alt: "Netflix wordmark",
-    src: "/brands/netflix-wordmark.svg",
+    alt: "Logo Netflix",
+    src: "/brands/iptv-france-netflix-wordmark.svg",
     width: 164,
     height: 40
   },
   {
     name: "beIN SPORTS",
-    alt: "beIN Sports wordmark",
-    src: "/brands/bein-sports-wordmark.svg",
+    alt: "Logo beIN Sports",
+    src: "/brands/iptv-france-bein-sports-wordmark.svg",
     width: 182,
     height: 42
   },
   {
     name: "Disney+",
-    alt: "Disney Plus wordmark",
-    src: "/brands/disney-plus-wordmark.svg",
+    alt: "Logo Disney Plus",
+    src: "/brands/iptv-france-disney-plus-wordmark.svg",
     width: 170,
     height: 42
   },
   {
     name: "HBO Max",
-    alt: "HBO Max wordmark",
-    src: "/brands/hbo-max-wordmark.svg",
+    alt: "Logo HBO Max",
+    src: "/brands/iptv-france-hbo-max-wordmark.svg",
     width: 178,
     height: 40
   },
   {
     name: "Prime Video",
-    alt: "Prime Video wordmark",
-    src: "/brands/prime-video-wordmark.svg",
+    alt: "Logo Prime Video",
+    src: "/brands/iptv-france-prime-video-wordmark.svg",
     width: 188,
     height: 42
   },
   {
     name: "ESPN",
-    alt: "ESPN wordmark",
-    src: "/brands/espn-wordmark.svg",
+    alt: "Logo ESPN",
+    src: "/brands/iptv-france-espn-wordmark.svg",
     width: 144,
     height: 40
   },
   {
     name: "Canal+",
-    alt: "Canal Plus wordmark",
-    src: "/brands/canal-plus-wordmark.svg",
+    alt: "Logo Canal Plus",
+    src: "/brands/iptv-france-canal-plus-wordmark.svg",
     width: 154,
     height: 40
   },
   {
     name: "DAZN",
-    alt: "DAZN wordmark",
-    src: "/brands/dazn-wordmark.svg",
+    alt: "Logo DAZN",
+    src: "/brands/iptv-france-dazn-wordmark.svg",
     width: 138,
     height: 40
   }
@@ -119,267 +121,297 @@ export const logoItems = [
 
 export const posters = [
   {
-    title: "Match Night Live",
-    meta: "Sports",
-    image: "/assets/img/portfolio/portfolio-2.webp"
+    title: "Soirée Ligue des Champions",
+    meta: "Sport",
+    image: "/assets/img/portfolio/iptv-france-abonnement-iptv-subscription-sport-direct.webp"
   },
   {
-    title: "Cinema Premieres",
-    meta: "Movies",
-    image: "/assets/img/portfolio/portfolio-4.webp"
+    title: "Grandes sorties cinéma",
+    meta: "Films",
+    image: "/assets/img/portfolio/iptv-france-abonnement-iptv-subscription-sport-films.webp"
   },
   {
-    title: "Top Crime Series",
-    meta: "Series",
-    image: "/assets/img/portfolio/portfolio-5.webp"
+    title: "Séries à suivre",
+    meta: "Séries",
+    image: "/assets/img/portfolio/iptv-france-abonnement-iptv-subscription-sport-series.webp"
   },
   {
-    title: "Kids & Family",
-    meta: "Family",
-    image: "/assets/img/portfolio/portfolio-6.webp"
+    title: "Programme famille",
+    meta: "Famille",
+    image: "/assets/img/portfolio/iptv-france-abonnement-iptv-subscription-sport-famille.webp"
   },
   {
-    title: "Weekend Blockbusters",
+    title: "Blockbusters du week-end",
     meta: "4K",
-    image: "/assets/img/portfolio/portfolio-7.webp"
+    image: "/assets/img/portfolio/iptv-france-abonnement-iptv-subscription-sport-4k.webp"
   },
   {
-    title: "Documentary Picks",
-    meta: "On-demand",
-    image: "/assets/img/portfolio/portfolio-10.webp"
+    title: "Documentaires et découvertes",
+    meta: "À la demande",
+    image: "/assets/img/portfolio/iptv-france-abonnement-iptv-subscription-sport-vod.webp"
   }
 ];
 
 export const statistics = [
-  { value: 40000, label: "channels worldwide" },
-  { value: 7000, label: "active clients" },
-  { value: 1500, label: "sports channels" },
-  { value: 50000, label: "movies & series" }
+  { value: 5, label: "familles d'appareils" },
+  { value: 4, label: "durées d'abonnement" },
+  { value: 7, label: "jours sur 7" },
+  { value: 1, label: "WhatsApp pour aller vite" }
 ];
 
 export const plans = [
   {
-    title: "Bronze",
+    title: "Test",
+    duration: "1 mois",
+    price: "12,99 €",
+    paymentLabel: "Paiement unique",
+    popular: false,
+    sku: "WS-TEST-1M",
+    availability: "InStock",
+    priceValidUntil: "2026-12-31",
+    hasMerchantReturnPolicy: {
+      returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
+      merchantReturnDays: 7,
+      returnMethod: "https://schema.org/ReturnByMail",
+      returnFees: "https://schema.org/FreeReturn"
+    },
+    cta: "Choisir cette offre",
+    summary: "Pour essayer sans engagement.",
+    features: [
+      "Chaînes françaises, sport et divertissement",
+      "Films et séries à la demande",
+      "Qualité HD selon la chaîne",
+      "Compatible Smart TV, Firestick et Android TV",
+      "Support WhatsApp 7j/7"
+    ]
+  },
+  {
+    title: "Découverte",
     duration: "3 mois",
-    oldPrice: "39.99€",
-    price: "22.99€",
-    discount: "-43%",
+    price: "22,99 €",
     paymentLabel: "Paiement unique",
     popular: false,
-    cta: "Commander Maintenant",
+    sku: "WS-DECOUVERTE-3M",
+    availability: "InStock",
+    priceValidUntil: "2026-12-31",
+    hasMerchantReturnPolicy: {
+      returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
+      merchantReturnDays: 7,
+      returnMethod: "https://schema.org/ReturnByMail",
+      returnFees: "https://schema.org/FreeReturn"
+    },
+    cta: "Choisir cette offre",
+    summary: "Pour commencer simplement.",
     features: [
-      "+22 000 chaînes",
-      "+60 000 films et séries",
-      "Qualité 4K/HD/SD",
-      "Compatibilité IPTV Smarters",
-      "Mises à jour gratuites",
-      "Netflix, Apple et plus",
-      "AntiFreeze 10.0",
-      "TV en Replay",
-      "Assistance 24/7"
+      "Chaînes françaises, sport et divertissement",
+      "Films et séries à la demande",
+      "Qualité HD / 4K selon la chaîne",
+      "Compatible Smart TV, Firestick et Android TV",
+      "Support WhatsApp 7j/7"
     ]
   },
   {
-    title: "Silver",
+    title: "Confort",
     duration: "6 mois",
-    oldPrice: "54.99€",
-    price: "34.99€",
-    discount: "-36%",
-    paymentLabel: "Paiement unique",
-    popular: false,
-    cta: "Commander Maintenant",
-    features: [
-      "+22 000 chaînes",
-      "+100 000 films et séries",
-      "Qualité SD/HD/4K",
-      "Compatibilité totale",
-      "Mises à jour gratuites",
-      "Netflix, Disney, Apple et plus",
-      "AntiFreeze 10.0",
-      "TV en Replay",
-      "Assistance 24/7"
-    ]
-  },
-  {
-    title: "Gold",
-    duration: "12 mois",
-    oldPrice: "64.99€",
-    price: "44.99€",
-    discount: "-31%",
+    price: "34,99 €",
     paymentLabel: "Paiement unique",
     popular: true,
-    badge: "Le Plus Populaire",
-    cta: "Commander Maintenant",
+    badge: "Le plus choisi",
+    sku: "WS-CONFORT-6M",
+    availability: "InStock",
+    priceValidUntil: "2026-12-31",
+    hasMerchantReturnPolicy: {
+      returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
+      merchantReturnDays: 7,
+      returnMethod: "https://schema.org/ReturnByMail",
+      returnFees: "https://schema.org/FreeReturn"
+    },
+    cta: "Choisir cette offre",
+    summary: "Le bon équilibre pour plusieurs mois.",
     features: [
-      "+22 000 chaînes",
-      "+160 000 films et séries",
-      "Qualité SD/HD/4K/8K",
-      "Compatibilité totale",
-      "Mises à jour gratuites",
-      "Netflix, Disney, Apple et plus",
-      "AntiFreeze 10.0",
-      "TV en Replay",
-      "Assistance 24/7"
+      "Chaînes françaises, sport et films",
+      "Séries et programmes à la demande",
+      "Qualité HD / 4K selon la chaîne",
+      "Compatible Smart TV, Firestick, Android TV, iPhone et PC",
+      "Support WhatsApp 7j/7"
     ]
   },
   {
-    title: "Diamond",
-    duration: "24 mois",
-    oldPrice: "89.99€",
-    price: "74.99€",
-    discount: "-17%",
+    title: "Premium",
+    duration: "Annuel",
+    price: "44,99 €",
     paymentLabel: "Paiement unique",
     popular: false,
-    cta: "Commander Maintenant",
+    sku: "WS-PREMIUM-12M",
+    availability: "InStock",
+    priceValidUntil: "2026-12-31",
+    hasMerchantReturnPolicy: {
+      returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
+      merchantReturnDays: 7,
+      returnMethod: "https://schema.org/ReturnByMail",
+      returnFees: "https://schema.org/FreeReturn"
+    },
+    cta: "Choisir cette offre",
+    summary: "Le meilleur prix sur l'année.",
     features: [
-      "+22 000 chaînes",
-      "+160 000 films et séries",
-      "Qualité SD/HD/4K/8K",
-      "Compatibilité totale",
-      "Mises à jour gratuites",
-      "Netflix, Disney, Apple et plus",
-      "AntiFreeze 10.0",
-      "TV en Replay",
-      "Assistance VIP 24/7"
+      "Chaînes françaises, sport, films et séries",
+      "Qualité HD / 4K selon la chaîne",
+      "Compatible Smart TV, Samsung, LG, Firestick, Android TV, iPhone et PC",
+      "Installation simple avec aide avant activation",
+      "Support WhatsApp 7j/7"
     ]
   }
 ];
 
 export const featureCards = [
   {
-    title: "99.99% uptime with anti-freeze technology",
-    text: "Built for stable evenings, match days, and peak-hour streaming without the frustrating drop-offs common on low-end services.",
-    icon: ShieldIcon
-  },
-  {
-    title: "4K / Full HD quality with zero-buffering focus",
-    text: "Optimized delivery and balanced streams keep playback sharp and responsive across live TV, sports, and on-demand content.",
-    icon: SparkIcon
-  },
-  {
-    title: "Compatible with every major device",
-    text: "Watch on Smart TV, Android TV, Fire TV, iPhone, iPad, MAG, Windows, macOS, and browser-based players.",
-    icon: TvIcon
-  },
-  {
-    title: "Instant activation and guided setup",
-    text: "Most subscriptions are ready within minutes, with simple instructions available for first-time IPTV users.",
+    title: "Activation rapide",
+    text: "Vous recevez vos accès rapidement pour commencer sans attendre.",
     icon: BoltIcon
   },
   {
-    title: "Global content, local support experience",
-    text: "International channels, regional favorites, and premium sports are paired with responsive help when you need it.",
-    icon: GlobeIcon
+    title: "Support 7j/7",
+    text: "Une réponse simple sur WhatsApp avant l'achat comme après l'installation.",
+    icon: SupportIcon
   },
   {
-    title: "24/7 assistance from a real team",
-    text: "Questions around installation, playback, or renewals are handled quickly so you can get back to watching.",
-    icon: SupportIcon
+    title: "Multi-appareils",
+    text: "Smart TV, Firestick, Android TV, iPhone, Android, PC et Mac.",
+    icon: TvIcon
+  },
+  {
+    title: "Qualité HD / 4K",
+    text: "Une image propre selon la chaîne, votre appareil et votre connexion.",
+    icon: SparkIcon
+  },
+  {
+    title: "Installation simple",
+    text: "Nous vous indiquons l'application à utiliser et les étapes à suivre.",
+    icon: ShieldIcon
+  },
+  {
+    title: "Chaînes, sport, films et séries",
+    text: "Une offre pensée pour regarder facilement dans le salon ou sur mobile.",
+    icon: GlobeIcon
   }
 ];
 
 export const deviceBadges = [
-  "Android",
-  "iPhone / iPad",
+  "Smart TV Samsung",
+  "Smart TV LG",
+  "Android Box",
   "Android TV",
-  "Samsung Tizen",
-  "LG webOS",
-  "Fire TV Stick",
-  "Google TV Streamer",
-  "Xiaomi Box",
-  "NVIDIA Shield",
-  "MAG Box",
+  "Firestick",
   "Apple TV",
-  "Windows",
-  "macOS",
-  "Web Player"
+  "iPhone / iPad",
+  "Android",
+  "PC / Mac"
 ];
 
 export const faqItems = [
   {
-    question: "How long does activation take?",
+    question: "Quelles chaînes peut-on regarder ?",
     answer:
-      "Most orders are activated in under 5 minutes after payment confirmation. During peak periods, setup can take a little longer, but it is usually completed the same day."
+      "Vous retrouvez les chaînes françaises les plus recherchées comme TF1, France 2, M6, Canal+, ainsi que du sport, des films et des séries."
   },
   {
-    question: "What is your refund policy?",
+    question: "Est-ce que cela fonctionne sur Smart TV et Firestick ?",
     answer:
-      "We include a money-back guarantee for eligible cases where the service cannot be activated or configured on a supported device. Trial or short-term plans may have different conditions."
+      "Oui. L'abonnement fonctionne sur Smart TV Samsung et LG, Firestick, Android TV, Apple TV, iPhone, Android, PC et Mac."
   },
   {
-    question: "Which devices are supported?",
+    question: "Combien de temps faut-il pour commencer ?",
     answer:
-      "The service works across Firestick, Apple TV, Google TV Streamer, Samsung Tizen, LG webOS, Xiaomi Box, Android TV, NVIDIA Shield, MAG boxes, iOS, Windows, macOS, and most IPTV apps that support Xtream Codes or M3U playlists."
+      "En général, tout va vite. Une fois vos accès reçus, l'installation prend seulement quelques minutes sur la plupart des appareils."
   },
   {
-    question: "How many connections can I use?",
+    question: "Est-ce difficile à installer ?",
     answer:
-      "That depends on the plan you choose. Entry plans are ideal for a single screen, while selected plans include extra simultaneous connections for home use."
+      "Non. Nous vous guidons avec des étapes simples et nous pouvons vous aider sur WhatsApp si vous avez le moindre doute."
+  },
+  {
+    question: "Quelle qualité d'image est proposée ?",
+    answer:
+      "La qualité dépend de la chaîne, de l'appareil et de votre connexion, avec de nombreuses chaînes disponibles en HD et 4K."
+  },
+  {
+    question: "Que contient l'offre ?",
+    answer:
+      "Vous avez accès aux chaînes françaises, au sport, aux films et aux séries dans une seule offre, sur plusieurs types d'appareils."
+  },
+  {
+    question: "Puis-je demander conseil avant de commander ?",
+    answer:
+      "Oui. Vous pouvez nous écrire sur WhatsApp ou via le formulaire pour vérifier votre appareil et choisir la durée la plus adaptée."
+  },
+  {
+    question: "Quelle formule choisir ?",
+    answer:
+      "La formule 1 mois permet de tester sans engagement, 3 mois pour commencer simplement, 6 mois pour un bon équilibre, et l'annuel pour profiter du prix le plus intéressant sur la durée."
   }
 ];
 
 export const helpTopics = [
   {
-    title: "Setup guide",
-    text: "Get online quickly with a clean setup checklist for Fire Stick, Smart TV, mobile devices, and desktop players.",
-    href: "/iptv-firestick-setup",
+    title: "Installation sur vos appareils",
+    text: "Guides simples pour Smart TV, Firestick, Android TV et Apple TV.",
+    href: "/devices",
     icon: BoltIcon,
-    items: ["Device checklist", "Activation steps", "Recommended apps"]
+    items: ["Étapes simples", "Applications conseillées", "Aide avant de commencer"]
   },
   {
-    title: "Payment",
-    text: "Understand plan durations, secure checkout, renewal timing, and what to expect after subscription activation.",
-    href: "#pricing",
+    title: "Choisir son offre",
+    text: "Comparez les durées et trouvez la formule qui vous convient le mieux.",
+    href: "/pricing",
     icon: GlobeIcon,
-    items: ["Plan comparisons", "Secure payment", "Refund guidance"]
+    items: ["1 mois", "3 mois", "6 mois", "Annuel"]
   },
   {
-    title: "Troubleshooting",
-    text: "Resolve buffering, connection drops, or player issues with practical fixes before contacting support.",
-    href: "/fix-iptv-buffering",
+    title: "Aide et stabilité",
+    text: "Conseils pratiques si l'image coupe ou si vous hésitez sur l'installation.",
+    href: "/guides/comment-ameliorer-stabilite-iptv-france",
     icon: SupportIcon,
-    items: ["Buffering fixes", "Network tips", "Playback recovery"]
+    items: ["Qualité d'image", "Connexion", "Support WhatsApp"]
   }
 ];
 
 export const testimonials = [
   {
-    name: "Daniel R.",
-    country: "United Kingdom",
-    avatar: "/assets/img/person/person-m-2.webp",
+    name: "Nicolas",
+    country: "Lille",
+    avatar: "/assets/img/person/iptv-france-person-m-2.webp",
     quote:
-      "Setup was fast, the interface feels polished, and live sports have been far more stable than the providers I used before."
+      "Installation faite sur Firestick en quelques minutes. J'ai retrouvé les chaînes françaises et le sport sans prise de tête."
   },
   {
-    name: "Nora B.",
-    country: "France",
-    avatar: "/assets/img/person/person-f-1.webp",
+    name: "Sonia",
+    country: "Lyon",
+    avatar: "/assets/img/person/iptv-france-person-f-1.webp",
     quote:
-      "The channel selection is massive, but what stood out most was the clean activation process and how quickly support answered."
+      "J'utilise surtout la Smart TV du salon. L'installation était simple et le support m'a répondu rapidement sur WhatsApp."
   },
   {
-    name: "Karim A.",
-    country: "Morocco",
-    avatar: "/assets/img/person/person-m-4.webp",
+    name: "Karim",
+    country: "Bruxelles",
+    avatar: "/assets/img/person/iptv-france-person-m-4.webp",
     quote:
-      "I use it across Smart TV and mobile when I travel. Playback quality has been excellent and the service feels trustworthy."
+      "Pratique pour regarder les chaînes françaises, le foot et quelques films sur Android TV et sur téléphone."
   },
   {
-    name: "Melissa T.",
-    country: "Canada",
-    avatar: "/assets/img/person/person-f-3.webp",
+    name: "Élodie",
+    country: "Marseille",
+    avatar: "/assets/img/person/iptv-france-person-f-3.webp",
     quote:
-      "It finally feels like a premium streaming product instead of a cluttered reseller page. Smooth experience from start to finish."
+      "Le site est clair, les tarifs sont simples et j'ai pu choisir l'offre adaptée à ma TV sans tourner en rond."
   }
 ];
 
-export const paymentBadges = ["Visa", "Mastercard", "PayPal", "Secure checkout", "7-day guarantee"];
+export const paymentBadges = ["Carte bancaire", "Visa", "Mastercard", "PayPal", "Support WhatsApp"];
 
 export const heroSignals = [
-  { label: "Serving customers since 2021", icon: ShieldIcon },
-  { label: "4K live sports and cinema", icon: PlayIcon },
-  { label: "Stable on every major platform", icon: SparkIcon }
+  { label: "TF1, M6, Canal+", icon: ShieldIcon },
+  { label: "HD / 4K", icon: PlayIcon },
+  { label: "Activation rapide", icon: SparkIcon }
 ];
 
-export const whatsappLink =
-  "https://wa.me/212600000000?text=Hi%2C%20I%20want%20to%20activate%20my%20subscription";
+export const whatsappLink = createWhatsAppLink();

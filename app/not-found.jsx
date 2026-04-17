@@ -4,10 +4,9 @@ import { GlobeIcon, PlayIcon, ShieldIcon, SupportIcon } from "@/components/icons
 import { LiveStatus } from "@/components/live-status";
 import { WhatsAppBubble } from "@/components/whatsapp-bubble";
 import { whatsappLink } from "@/components/site-data";
-import { regionCatalog } from "@/lib/market-data";
 
 export const metadata = {
-  title: "Page not found",
+  title: "Page non trouvee",
   robots: {
     index: false,
     follow: false
@@ -16,22 +15,22 @@ export const metadata = {
 
 const recoveryCards = [
   {
-    title: "Return to the homepage",
-    text: "Go back to the main WandaStream experience and continue from the global hub.",
+    title: "Retour à l'accueil",
+    text: "Reprenez le parcours principal et retrouvez directement les chaînes, le sport, les films et les séries.",
     href: "/",
     icon: GlobeIcon,
     kind: "internal"
   },
   {
-    title: "Open pricing",
-    text: "Jump straight into the full pricing table and choose the right plan without extra steps.",
-    href: "/#pricing",
+    title: "Voir les offres",
+    text: "Accédez directement aux tarifs et choisissez la durée qui vous convient.",
+    href: "/pricing",
     icon: PlayIcon,
     kind: "internal"
   },
   {
-    title: "Contact support",
-    text: "If you expected a different page, support can route you to the right setup or offer fast.",
+    title: "WhatsApp",
+    text: "Si vous cherchiez une autre page, nous pouvons vous rediriger rapidement vers le bon guide ou la bonne offre.",
     href: whatsappLink,
     icon: SupportIcon,
     kind: "external"
@@ -44,7 +43,7 @@ export default function NotFound() {
       <div className="status-strip">
         <div className="container status-strip-inner">
           <LiveStatus />
-          <div className="status-copy">The page you requested is unavailable, but the service is online.</div>
+          <div className="status-copy">La page demandee est indisponible, mais le service reste actif.</div>
         </div>
       </div>
 
@@ -52,17 +51,18 @@ export default function NotFound() {
         <div className="container header-inner">
           <Brand priority />
 
-          <nav className="desktop-nav" aria-label="404 navigation">
-            <Link href="/">Home</Link>
-            <Link href="/#pricing">Pricing</Link>
-            <Link href="/library">Library</Link>
-            <a href={whatsappLink} target="_blank" rel="noreferrer">
-              Support
-            </a>
+          <nav className="desktop-nav" aria-label="Navigation 404">
+            <Link href="/">Accueil</Link>
+            <Link href="/#benefits">Avantages</Link>
+            <Link href="/#pricing">Tarifs</Link>
+            <Link href="/#library">Films & séries</Link>
+            <Link href="/guides">Guides</Link>
+            <Link href="/devices">Appareils</Link>
+            <Link href="/#contact">Contact</Link>
           </nav>
 
           <a className="button button-primary header-cta" href="/#pricing">
-            Start now
+            Voir les offres
           </a>
         </div>
       </header>
@@ -73,52 +73,44 @@ export default function NotFound() {
             <div className="reveal is-visible hero-copy not-found-copy">
               <div className="hero-badge">
                 <ShieldIcon />
-                <span>Error 404</span>
+                <span>Erreur 404</span>
               </div>
 
               <h1>
-                <span className="hero-brand-line">Page missing</span>
-                <span>This route does not exist anymore.</span>
+                <span className="hero-brand-line">Page introuvable</span>
+                <span>Cette page n'existe plus.</span>
               </h1>
 
               <p>
-                The link may be outdated, incomplete, or moved during the site refactor. You can head back to the
-                homepage, open pricing directly, or message support and we will point you to the right page fast.
+                Le lien est peut-être incomplet ou l'ancienne page a été déplacée. Vous pouvez revenir à l'accueil, ouvrir les offres ou nous
+                écrire sur WhatsApp pour aller plus vite.
               </p>
 
               <div className="hero-actions">
                 <Link className="button button-primary" href="/">
-                  Back home
+                  Retour accueil
                 </Link>
                 <Link className="button button-secondary" href="/#pricing">
-                  View pricing
+                  Voir les offres
                 </Link>
                 <a className="button button-secondary" href={whatsappLink} target="_blank" rel="noreferrer">
-                  Contact support
+                  WhatsApp
                 </a>
               </div>
 
-              <div className="signal-row" aria-label="Recovery shortcuts">
+              <div className="signal-row" aria-label="Raccourcis utiles">
                 <div className="signal-pill">
                   <ShieldIcon />
-                  <span>Stable service online</span>
+                  <span>Service actif</span>
                 </div>
                 <div className="signal-pill">
                   <PlayIcon />
-                  <span>Pricing available now</span>
+                  <span>Tarifs disponibles</span>
                 </div>
                 <div className="signal-pill">
                   <SupportIcon />
-                  <span>24/7 human support</span>
+                  <span>Support disponible</span>
                 </div>
-              </div>
-
-              <div className="footer-link-row not-found-region-row" aria-label="Regional hubs">
-                {regionCatalog.map((region) => (
-                  <Link className="footer-chip" href={`/${region.slug}`} key={region.slug}>
-                    {region.shortName}
-                  </Link>
-                ))}
               </div>
             </div>
 
@@ -126,7 +118,7 @@ export default function NotFound() {
               <div className="guide-card not-found-panel">
                 <div className="not-found-code">404</div>
                 <p className="not-found-panel-copy">
-                  Choose one of the fastest paths below to continue browsing or start your subscription flow.
+                  Choisissez l'un des chemins rapides ci-dessous pour continuer votre visite.
                 </p>
 
                 <div className="feature-grid not-found-card-grid">
@@ -161,17 +153,17 @@ export default function NotFound() {
           <div className="footer-inner">
             <div className="footer-brand-block">
               <FooterBrand />
-              <p>Continue with the homepage, pricing, or a regional hub without losing the WandaStream flow.</p>
+              <p>IPTV France avec chaînes françaises, sport, films et séries. Vous pouvez reprendre avec l'accueil, les offres ou WhatsApp.</p>
             </div>
             <a href={whatsappLink} target="_blank" rel="noreferrer">
               <SupportIcon />
-              <span>24/7 support</span>
+              <span>Support disponible</span>
             </a>
           </div>
         </div>
       </footer>
 
-      <WhatsAppBubble href={whatsappLink} label="Contact support" />
+      <WhatsAppBubble href={whatsappLink} label="Ouvrir WhatsApp" />
     </>
   );
 }

@@ -103,7 +103,7 @@ export function SecureCheckoutButton({ className, fallbackUrl, label, planId }) 
   return (
     <>
       <button className={className} type="button" onClick={handleClick} disabled={loading}>
-        {loading ? "Securing checkout..." : label}
+        {loading ? "Ouverture..." : label}
       </button>
       {siteKey ? <div className="turnstile-shell" id={`pricing-turnstile-${turnstileContainerId}`} ref={containerRef} /> : null}
     </>

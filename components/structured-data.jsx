@@ -1,104 +1,93 @@
-import Script from "next/script";
-import { faqItems, plans, testimonials } from "@/components/site-data";
-import { regionCatalog } from "@/lib/market-data";
+"use client";
+
+import { faqItems, plans } from "@/components/site-data";
 import { siteConfig } from "@/lib/site";
 
-function parsePrice(price) {
-  return price.replace(/[^\d.]/g, "");
-}
-
 export function StructuredData() {
-  const goldPlan = plans.find((plan) => plan.popular) ?? plans[0];
-  const featuredReview = testimonials[1] ?? testimonials[0];
-  const goldProductName = `${siteConfig.name} Gold - Abonnement IPTV Premium ${goldPlan.duration}`;
+  const highlightedPlan = plans.find((plan) => plan.popular) ?? plans[0];
 
-  const productSchema = {
+  const orgSchema = {
     "@context": "https://schema.org",
-    "@type": "Product",
-    name: goldProductName,
+    "@type": "Organization",
+    name: "WandaStream",
+    url: siteConfig.siteUrl,
+    logo: `${siteConfig.siteUrl}/assets/img/iptv-france-wandastream-iptv-logo.svg`,
     description:
-      "Abonnement IPTV Premium 12 mois avec streaming 4K sans coupure, anti-freeze 10.0, replay TV et assistance 24/7.",
-    brand: {
-      "@type": "Brand",
-      name: siteConfig.name
-    },
-    category: "Abonnement IPTV Premium",
-    image: [`${siteConfig.siteUrl}/hero.webp`, `${siteConfig.siteUrl}/pricing-showcase.webp`],
-    sku: "WANDASTREAM-GOLD-12M",
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: siteConfig.ratingValue,
-      reviewCount: siteConfig.reviewCount,
-      bestRating: "5",
-      worstRating: "1"
-    },
-    offers: {
-      "@type": "Offer",
-      url: `${siteConfig.siteUrl}/pricing`,
-      price: parsePrice(goldPlan.price),
-      priceCurrency: siteConfig.currency,
-      availability: "https://schema.org/InStock",
-      eligibleRegion: siteConfig.countries.map((country) => ({
-        "@type": "Country",
-        name: country
-      }))
+      "Abonnement IPTV France avec chaînes françaises, sport, films et séries. Compatible Smart TV, Firestick, Android TV, iPhone et PC.",
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: siteConfig.supportPhone,
+      contactType: "Service client",
+      areaServed: "FR",
+      availableLanguage: "French"
     }
-  };
-
-  const subscriptionSchema = {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    name: `${siteConfig.name} - Abonnement IPTV Premium`,
-    serviceType: "Abonnement IPTV Premium",
-    description:
-      "Service IPTV Premium avec chaines 4K, cinema, sport, activation instantanee, assistance 24/7 et streaming sans coupure.",
-    provider: {
-      "@type": "Organization",
-      name: siteConfig.name,
-      url: siteConfig.siteUrl
-    },
-    areaServed: siteConfig.countries.map((country) => ({
-      "@type": "Country",
-      name: country
-    })),
-    offers: {
-      "@type": "Offer",
-      url: `${siteConfig.siteUrl}/pricing`,
-      price: parsePrice(goldPlan.price),
-      priceCurrency: siteConfig.currency,
-      availability: "https://schema.org/InStock"
-    }
-  };
-
-  const reviewSchema = {
-    "@context": "https://schema.org",
-    "@type": "Review",
-    itemReviewed: {
-      "@type": "Product",
-      name: goldProductName,
-      brand: {
-        "@type": "Brand",
-        name: siteConfig.name
-      }
-    },
-    author: {
-      "@type": "Person",
-      name: featuredReview.name
-    },
-    reviewRating: {
-      "@type": "Rating",
-      ratingValue: "5",
-      bestRating: "5"
-    },
-    reviewBody: featuredReview.quote
   };
 
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: siteConfig.name,
+    name: "WandaStream",
     url: siteConfig.siteUrl,
-    description: siteConfig.description
+    hasPart: [
+      {
+        "@type": "WebPage",
+        name: "Guides IPTV France",
+        url: `${siteConfig.siteUrl}/guides`,
+        description: "Guides simples pour l'installation et l'utilisation"
+      },
+      {
+        "@type": "WebPage",
+        name: "Appareils compatibles",
+        url: `${siteConfig.siteUrl}/devices`,
+        description: "Smart TV, Firestick, Android TV et Apple TV"
+      },
+      {
+        "@type": "WebPage",
+        name: "Tarifs abonnement IPTV",
+        url: `${siteConfig.siteUrl}/#pricing`,
+        description: "Choisir la durée la plus adaptée"
+      },
+      {
+        "@type": "WebPage",
+        name: "Films et séries",
+        url: `${siteConfig.siteUrl}/#library`,
+        description: "Films, séries et contenus à la demande"
+      }
+    ]
+  };
+
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: `WandaStream ${highlightedPlan.title} - Abonnement IPTV ${highlightedPlan.duration}`,
+    image: [`${siteConfig.siteUrl}/iptv-france-hero.webp`],
+    description:
+      "Abonnement IPTV France avec chaînes françaises, sport, films et séries. Compatible Smart TV, Firestick, Android TV, iPhone et PC.",
+    sku: highlightedPlan.sku,
+    brand: { "@type": "Brand", name: "WandaStream" },
+    offers: {
+      "@type": "Offer",
+      url: `${siteConfig.siteUrl}/#pricing`,
+      price: String(highlightedPlan.price).replace(/\s|€/g, "").replace(",", "."),
+      priceCurrency: "EUR",
+      priceValidUntil: highlightedPlan.priceValidUntil,
+      availability: "https://schema.org/InStock",
+      itemCondition: "https://schema.org/NewCondition",
+      hasMerchantReturnPolicy: {
+        "@type": "MerchantReturnPolicy",
+        ...highlightedPlan.hasMerchantReturnPolicy
+      }
+    }
+  };
+
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Abonnement IPTV France",
+    provider: { "@type": "Organization", name: "WandaStream" },
+    areaServed: { "@type": "Country", name: "France" },
+    serviceType: "Télévision en direct, sport, films et séries",
+    termsOfService: `${siteConfig.siteUrl}/terms`
   };
 
   const faqSchema = {
@@ -114,50 +103,27 @@ export function StructuredData() {
     }))
   };
 
-  const areaServedSchema = {
+  const homePageSchema = {
     "@context": "https://schema.org",
-    "@type": "ItemList",
-    name: "WandaStream regional landing pages",
-    itemListElement: regionCatalog.map((region, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      name: `${region.shortName} IPTV`,
-      url: `${siteConfig.siteUrl}/${region.slug}`
-    }))
+    "@type": "WebPage",
+    name: "WandaStream | IPTV France, sport, films et séries",
+    url: siteConfig.siteUrl,
+    description:
+      "Abonnement IPTV France avec chaînes françaises, sport, films et séries en HD / 4K. Compatible Smart TV, Firestick, Android TV, iPhone et PC.",
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": siteConfig.siteUrl
+    }
   };
 
   return (
     <>
-      <Script
-        id="website-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
-      />
-      <Script
-        id="product-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
-      />
-      <Script
-        id="subscription-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(subscriptionSchema) }}
-      />
-      <Script
-        id="review-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }}
-      />
-      <Script
-        id="faq-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
-      <Script
-        id="area-served-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(areaServedSchema) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(homePageSchema) }} />
     </>
   );
 }

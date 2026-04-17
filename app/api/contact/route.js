@@ -1,13 +1,26 @@
 import { NextResponse } from "next/server";
-import { getRegionBySlug, getRegionContactHref } from "@/lib/market-data";
 import { verifyTurnstileToken } from "@/lib/dal/turnstile";
 import { checkRateLimit, getClientIp } from "@/lib/security/rate-limit";
-import { whatsappLink } from "@/components/site-data";
+import { getOriginConfig } from "@/lib/dal/env";
 
 export const runtime = "nodejs";
 
 function isSuspiciousBot(botSignals = {}) {
   return Boolean(botSignals?.webdriver) || Number(botSignals?.suspicionScore ?? 0) >= 2;
+}
+
+function buildWhatsAppUrl(payload = {}) {
+  const supportPhone = getOriginConfig().supportPhone.replace(/\D/g, "");
+  const lines = [
+    "Bonjour, je souhaite un abonnement IPTV France.",
+    `Site web: ${getOriginConfig().siteUrl}`,
+    `Nom: ${payload.name || "Non renseigné"}`,
+    `E-mail: ${payload.email || "Non renseigné"}`,
+    `Appareil: ${payload.device || "Non renseigné"}`,
+    `Message: ${payload.message || "Non renseigné"}`
+  ];
+
+  return `https://wa.me/${supportPhone}?text=${encodeURIComponent(lines.join("\n"))}`;
 }
 
 export async function POST(request) {
@@ -22,22 +35,21 @@ export async function POST(request) {
   if (!limit.success) {
     return NextResponse.json(
       {
-        message: "Too many secure requests from this IP. Please try again later."
+        message: "Vous avez envoyé plusieurs demandes. Réessayez un peu plus tard."
       },
       { status: 429 }
     );
   }
 
   const payload = await request.json();
-  const region = getRegionBySlug(payload.regionSlug);
-  const nextActionUrl = region ? getRegionContactHref(region) : whatsappLink;
+  const nextActionUrl = buildWhatsAppUrl(payload);
 
   if (payload.honeypot || isSuspiciousBot(payload.botSignals)) {
     return NextResponse.json(
       {
         ok: true,
         shadowBanned: true,
-        message: "Request received.",
+        message: "Demande reçue.",
         nextActionUrl
       },
       { status: 200 }
@@ -52,7 +64,7 @@ export async function POST(request) {
   if (!verification.success) {
     return NextResponse.json(
       {
-        message: "Security verification failed. Please refresh and try again."
+        message: "Votre demande n'a pas pu être vérifiée. Rechargez la page puis réessayez."
       },
       { status: 400 }
     );
@@ -60,7 +72,7 @@ export async function POST(request) {
 
   return NextResponse.json({
     ok: true,
-    message: "Verification complete. Continue to secure support for pricing and activation.",
+    message: "Message envoyé. Ouvrez WhatsApp pour continuer rapidement.",
     nextActionUrl
   });
 }

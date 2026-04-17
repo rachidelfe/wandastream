@@ -15,7 +15,12 @@ function normalizePlanId(value) {
 }
 
 function parsePlanPriceToMinorUnits(price) {
-  const normalized = Number.parseFloat(String(price).replace(/[^\d.]/g, ""));
+  const normalized = Number.parseFloat(
+    String(price)
+      .replace(/\s|€/g, "")
+      .replace(",", ".")
+      .replace(/[^\d.]/g, "")
+  );
   return Math.round(normalized * 100);
 }
 
@@ -35,7 +40,7 @@ export async function POST(request) {
   if (!limit.success) {
     return NextResponse.json(
       {
-        message: "Too many checkout attempts from this IP. Please try again later."
+        message: "Trop de tentatives pour le moment. Réessayez un peu plus tard."
       },
       { status: 429 }
     );
@@ -62,7 +67,7 @@ export async function POST(request) {
   if (!verification.success) {
     return NextResponse.json(
       {
-        message: "Security verification failed. Please refresh and try again."
+        message: "La demande n'a pas pu être vérifiée. Rechargez la page puis réessayez."
       },
       { status: 400 }
     );
@@ -75,7 +80,7 @@ export async function POST(request) {
     return NextResponse.json({
       ok: true,
       fallbackUrl: whatsappLink,
-      message: "Stripe is not configured yet. Falling back to secure support."
+      message: "Le paiement en ligne n'est pas disponible pour le moment. Continuez sur WhatsApp."
     });
   }
 
@@ -98,8 +103,8 @@ export async function POST(request) {
           currency: "eur",
           unit_amount: parsePlanPriceToMinorUnits(selectedPlan.price),
           product_data: {
-            name: `${selectedPlan.title} IPTV subscription`,
-            description: `${selectedPlan.duration} secure IPTV plan with support and premium streaming access.`
+            name: `WandaStream ${selectedPlan.title}`,
+            description: `${selectedPlan.duration} avec chaînes françaises, sport, films et séries.`
           }
         }
       }

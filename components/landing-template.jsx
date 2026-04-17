@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Brand, FooterBrand } from "@/components/brand";
-import { Counter } from "@/components/counter";
 import { FullPricing } from "@/components/full-pricing";
 import { ActivateSubscriptionButton } from "@/components/activate-subscription-button";
 import { LeadCaptureForm } from "@/components/lead-capture-form";
@@ -9,22 +8,21 @@ import { Reveal } from "@/components/reveal";
 import { WhatsAppBubble } from "@/components/whatsapp-bubble";
 import {
   BoltIcon,
-  CardIcon,
-  GlobeIcon,
-  PlayIcon,
-  ShieldIcon,
   SupportIcon,
-  TvIcon,
-  WhatsAppIcon
+  TvIcon
 } from "@/components/icons";
 import { logoItems, posters } from "@/components/site-data";
 
-function SectionHeading({ eyebrow, title, text, align = "left" }) {
+function SectionHeading({ eyebrow, title, text, align = "left", size = "default" }) {
+  if (!eyebrow && !title && !text) {
+    return null;
+  }
+
   return (
-    <div className={`section-heading${align === "center" ? " is-centered" : ""}`}>
-      <span className="eyebrow">{eyebrow}</span>
-      <h2>{title}</h2>
-      <p>{text}</p>
+    <div className={`section-heading${align === "center" ? " is-centered" : ""}${size === "compact" ? " is-compact" : ""}`}>
+      {eyebrow ? <span className="eyebrow">{eyebrow}</span> : null}
+      {title ? <h2>{title}</h2> : null}
+      {text ? <p>{text}</p> : null}
     </div>
   );
 }
@@ -63,13 +61,13 @@ function HeroShowcase() {
         <span className="console-dot" />
         <span className="console-dot" />
         <span className="console-dot" />
-        <div className="hero-media-label">Live sports • Movies • Kids • Premium</div>
+        <div className="hero-media-label">Chaînes • Sport • Films • Séries</div>
       </div>
 
       <div className="hero-media-frame">
         <Image
-          src="/hero.webp"
-          alt="Interface WandaStream montrant une experience IPTV premium avec cinema, sport et streaming 4K"
+          src="/iptv-france-hero.webp"
+          alt="WandaStream IPTV France sur Smart TV avec sport, films et séries"
           width={1440}
           height={820}
           priority
@@ -127,30 +125,12 @@ function ComparisonTable({ section }) {
           {section.rows.map((row) => (
             <tr key={row.id ?? row.device}>
               {section.columns.map((column) => (
-                <td key={column.key}>
-                  {column.render ? column.render(row) : row[column.key]}
-                </td>
+                <td key={column.key}>{column.render ? column.render(row) : row[column.key]}</td>
               ))}
             </tr>
           ))}
         </tbody>
       </table>
-    </div>
-  );
-}
-
-function CoverageGrid({ regions }) {
-  return (
-    <div className="coverage-grid">
-      {regions.map((region, index) => (
-        <Reveal delay={index * 70} key={region.slug}>
-          <Link className="guide-card coverage-card" href={`/${region.slug}`}>
-            <span className="eyebrow">/{region.slug}</span>
-            <h3>{region.shortName}</h3>
-            <p>{region.coverageSummary}</p>
-          </Link>
-        </Reveal>
-      ))}
     </div>
   );
 }
@@ -168,61 +148,48 @@ function FaqPanel({ items }) {
   );
 }
 
-function navItems({ insideRegion, basePath }) {
-  if (insideRegion) {
-    return [
-      { label: "Home", href: basePath },
-      { label: "Pricing", href: `${basePath}#pricing` },
-      { label: "Library", href: `${basePath}#library` },
-      { label: "Guides", href: `${basePath}/blog` },
-      { label: "Contact", href: `${basePath}#contact` },
-      { label: "Global Hub", href: "/" }
-    ];
-  }
+const navigationLinks = [
+  { label: "Accueil", href: "/" },
+  { label: "Avantages", href: "/#benefits" },
+  { label: "Tarifs", href: "/#pricing" },
+  { label: "Films & séries", href: "/#library" },
+  { label: "Guides", href: "/guides" },
+  { label: "Appareils", href: "/devices" },
+  { label: "Contact", href: "/#contact" }
+];
 
-  return [
-    { label: "Home", href: "#hero" },
-    { label: "Benefits", href: "#benefits" },
-    { label: "Library", href: "#library" },
-    { label: "Pricing", href: "#pricing" },
-    { label: "Contact", href: "#contact" }
-  ];
-}
-
-function Header({ insideRegion, basePath, pricingHref, contactHref }) {
-  const links = navItems({ insideRegion, basePath });
-
+function Header({ pricingHref, contactHref }) {
   return (
     <header className="site-header is-scrolled">
       <div className="container header-inner">
-        <Brand href={insideRegion ? basePath : "#hero"} priority />
+        <Brand href="/" priority />
 
-        <nav className="desktop-nav" aria-label="Primary">
-          {links.map((link) => (
+        <nav className="desktop-nav" aria-label="Navigation principale">
+          {navigationLinks.map((link) => (
             <Link key={link.href} href={link.href}>
               {link.label}
             </Link>
           ))}
         </nav>
 
-        <ActivateSubscriptionButton className="button button-primary header-cta" href={pricingHref} label="Start now" />
+        <ActivateSubscriptionButton className="button button-primary header-cta" href={pricingHref} label="Voir les offres" />
 
         <details className="mobile-nav-shell">
-          <summary className="mobile-menu-toggle" aria-label="Toggle navigation">
+          <summary className="mobile-menu-toggle" aria-label="Ouvrir la navigation">
             <span />
             <span />
             <span />
           </summary>
           <div className="mobile-nav-wrap">
-            <nav className="mobile-nav" aria-label="Mobile">
-              {links.map((link) => (
+            <nav className="mobile-nav" aria-label="Navigation mobile">
+              {navigationLinks.map((link) => (
                 <Link key={link.href} href={link.href}>
                   {link.label}
                 </Link>
               ))}
-              <ActivateSubscriptionButton className="button button-primary mobile-nav-cta" href={pricingHref} label="Start now" />
+              <ActivateSubscriptionButton className="button button-primary mobile-nav-cta" href={pricingHref} label="Voir les offres" />
               <a className="button button-secondary mobile-nav-cta" href={contactHref} target="_blank" rel="noreferrer">
-                Contact support
+                WhatsApp
               </a>
             </nav>
           </div>
@@ -232,222 +199,122 @@ function Header({ insideRegion, basePath, pricingHref, contactHref }) {
   );
 }
 
-function Footer({ text, showRegionLinks, regions, contactHref }) {
+function Footer({ text, contactHref, note }) {
   return (
     <footer className="site-footer">
-        <div className="container footer-stack">
-          <div className="footer-inner">
-            <div className="footer-brand-block">
-              <FooterBrand />
-              <p>{text}</p>
-            </div>
-            <a href={contactHref} target="_blank" rel="noreferrer">
-              <SupportIcon />
-              <span>24/7 support</span>
-            </a>
-          </div>
-
-        {showRegionLinks ? (
-          <div className="footer-link-row" aria-label="Regional links">
-            {regions.map((region) => (
-              <Link className="footer-chip" href={`/${region.slug}`} key={region.slug}>
-                {region.shortName}
-              </Link>
-            ))}
-          </div>
-        ) : null}
-      </div>
-    </footer>
-  );
-}
-
-export function RegionalFooter({ region, contactHref }) {
-  const french = ["fr", "ma", "be"].includes(region.slug);
-  const basePath = `/${region.slug}`;
-
-  return (
-    <footer className="site-footer regional-footer">
       <div className="container footer-stack">
-        <div className="regional-footer-hero guide-card">
-          <div className="regional-footer-copy">
-            <FooterBrand href={basePath} />
-            <span className="eyebrow">{french ? "Marche local" : "Regional market"}</span>
-            <h2>
-              {french
-                ? `${region.shortName} reste dans un parcours plus local et plus clair.`
-                : `${region.shortName} now stays inside a clearer local conversion path.`}
-            </h2>
-            <p>
-              {french
-                ? `Le footer reprend les repères utiles pour ${region.city}, ${region.secondaryCity}, les signaux de confiance, et les liens qui mènent directement vers les tarifs, les guides et le support.`
-                : `This footer keeps the useful local signals for ${region.city}, ${region.secondaryCity}, trust drivers, and the shortest links into pricing, guides, and support.`}
-            </p>
-            <div className="regional-footer-inline">
-              <span className="regional-service-pill">
-                <GlobeIcon />
-                <span>{region.city} + {region.secondaryCity}</span>
-              </span>
-              <span className="regional-service-pill">
-                <CardIcon />
-                <span>{region.currencyLabel}</span>
-              </span>
-              <span className="regional-service-pill">
-                <SupportIcon />
-                <span>{region.languageLabel}</span>
-              </span>
-            </div>
+        <div className="footer-inner">
+          <div className="footer-brand-block">
+            <FooterBrand />
+            <p>{text}</p>
           </div>
-
-          <div className="regional-footer-side">
-            <div className="footer-link-row">
-              <Link className="footer-chip" href={basePath}>
-                Home
-              </Link>
-              <Link className="footer-chip" href={`${basePath}#pricing`}>
-                Pricing
-              </Link>
-              <Link className="footer-chip" href={`${basePath}/blog`}>
-                Guides
-              </Link>
-              <Link className="footer-chip" href={`${basePath}#library`}>
-                Library
-              </Link>
-            </div>
-            <a className="button button-secondary regional-footer-cta" href={contactHref} target="_blank" rel="noreferrer">
-              Contact support
-            </a>
-          </div>
+          <a href={contactHref} target="_blank" rel="noreferrer">
+            <SupportIcon />
+            <span>Support disponible</span>
+          </a>
         </div>
 
-        <div className="regional-footer-grid">
-          <article className="guide-card regional-footer-card">
-            <span className="eyebrow">{french ? "Contexte" : "Local setup"}</span>
-            <div className="regional-footer-card-head">
-              <span className="feature-icon">
-                <TvIcon />
-              </span>
-              <h3>{region.shortName}</h3>
-            </div>
-            <p className="regional-footer-card-text">
-              {french
-                ? `Repères utiles pour ${region.city}, ${region.secondaryCity}, les paiements ${region.currencyCode} et un support adapte au marché local.`
-                : `Useful local signals for ${region.city}, ${region.secondaryCity}, ${region.currencyCode} context, and market-specific support.`}
-            </p>
-          </article>
+        <span className="update-badge">Mise à jour : Avril 2026</span>
 
-          <article className="guide-card regional-footer-card">
-            <span className="eyebrow">{french ? "Focus + confiance" : "Focus + trust"}</span>
-            <div className="regional-footer-card-head">
-              <span className="feature-icon">
-                <ShieldIcon />
-              </span>
-              <h3>{french ? "Ce qui convertit le mieux" : "What converts best in-region"}</h3>
-            </div>
-            <ul className="help-points compact-list">
-              {[...region.providerFocus.slice(0, 2), ...region.trustSignals.slice(0, 2)].map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </article>
+        {note ? <p className="footer-note">{note}</p> : null}
 
-          <article className="guide-card regional-footer-card regional-footer-quote">
-            <span className="eyebrow">{french ? "Preuve locale" : "Local proof"}</span>
-            <div className="regional-footer-card-head">
-              <span className="feature-icon">
-                <WhatsAppIcon />
-              </span>
-              <h3>{region.testimonial.name}</h3>
-            </div>
-            <p>"{region.testimonial.quote}"</p>
-            <span className="regional-footer-location">{region.testimonial.location}</span>
-            <div className="regional-footer-service-row">
-              <span className="regional-service-pill">
-                <BoltIcon />
-                <span>{french ? "Activation rapide" : "Fast activation"}</span>
-              </span>
-              <span className="regional-service-pill">
-                <SupportIcon />
-                <span>24/7 support</span>
-              </span>
-            </div>
-          </article>
+        <div className="footer-link-row" aria-label="Liens rapides">
+          <Link className="footer-chip" href="/guides">
+            Guides
+          </Link>
+          <Link className="footer-chip" href="/devices">
+            Appareils
+          </Link>
+          <Link className="footer-chip" href="/#pricing">
+            Tarifs
+          </Link>
+          <Link className="footer-chip" href="/#contact">
+            Contact
+          </Link>
+        </div>
+
+        <div className="footer-link-row" aria-label="Liens légaux">
+          <Link className="footer-chip" href="/terms">
+            Conditions
+          </Link>
+          <Link className="footer-chip" href="/terms#confidentialite">
+            Confidentialité
+          </Link>
+        </div>
+
+        <div className="regional-footer-inline">
+          <span className="regional-service-pill">
+            <TvIcon />
+            <span>Compatible tous appareils</span>
+          </span>
+          <span className="regional-service-pill">
+            <BoltIcon />
+            <span>Installation simple</span>
+          </span>
+          <span className="regional-service-pill">
+            <SupportIcon />
+            <span>Support disponible</span>
+          </span>
         </div>
       </div>
     </footer>
   );
 }
 
-export function LandingTemplate({ content, insideRegion = false, basePath = "/", contactHref, regions = [], region = null }) {
-  const pricingHref = insideRegion ? `${basePath}#pricing` : "#pricing";
-  const regionSlug = insideRegion ? basePath.replace(/^\//, "") : "global";
+export function LandingTemplate({ content, contactHref }) {
+  const pricingHref = "/#pricing";
 
   return (
     <>
-      <Header insideRegion={insideRegion} basePath={basePath} pricingHref={pricingHref} contactHref={contactHref} />
+      <Header pricingHref={pricingHref} contactHref={contactHref} />
 
       <main>
-        <section className="hero section hero-section" id="hero">
-          <div className="hero-grid">
-            <Reveal className="hero-copy">
-              <div className="hero-badge">
-                <ShieldIcon />
-                <span>{content.hero.badge}</span>
-              </div>
-
-              <h1>
-                <span className="hero-brand-line">WandaStream</span>
-                <span>{content.hero.title}</span>
-              </h1>
-              <p>{content.hero.intro}</p>
+        <section className="section hero" id="hero">
+          <div className="container hero-grid">
+            <div className="hero-copy reveal is-visible">
+              <span className="eyebrow hero-kicker">WandaStream</span>
+              <h1 className="hero-title">{content.hero.title}</h1>
+              <p className="hero-subtitle">{content.hero.intro}</p>
 
               <div className="hero-actions">
-                <Link className="button button-primary" href={pricingHref}>
-                  Start now
-                </Link>
+                <ActivateSubscriptionButton className="button button-primary" href={pricingHref} label="Voir les offres" />
                 <a className="button button-secondary" href={contactHref} target="_blank" rel="noreferrer">
-                  Contact support
+                  WhatsApp
                 </a>
               </div>
 
-              <div className="device-row" aria-label="Supported hero devices">
+              <div className="device-row device-icons-container">
                 {content.hero.devices.map(({ icon: Icon, label }) => (
-                  <div className="device-chip" key={label}>
+                  <span className="device-icon-wrapper" key={label}>
                     <Icon />
-                    <span>{label}</span>
-                  </div>
+                    <span className="device-icon-label">{label}</span>
+                  </span>
                 ))}
               </div>
 
               <div className="signal-row">
-                {content.hero.signals.map(({ icon: Icon, label }, index) => (
-                  <div className="signal-pill" key={label} style={{ "--delay": `${index * 120}ms` }}>
+                {content.hero.signals.map(({ icon: Icon, label }) => (
+                  <span className="signal-pill" key={label}>
                     <Icon />
                     <span>{label}</span>
-                  </div>
+                  </span>
                 ))}
               </div>
-            </Reveal>
+            </div>
 
-            <Reveal className="hero-visual-wrap" delay={140}>
-              <div className="hero-visual">
-                <div className="visual-orb orb-orange" />
-                <div className="visual-orb orb-green" />
-                <HeroShowcase />
-              </div>
+            <Reveal delay={120}>
+              <HeroShowcase />
             </Reveal>
           </div>
         </section>
 
-        <section className="section deferred-section benefits-section" id="benefits">
+        <section className="section deferred-section" id="benefits">
           <div className="container">
-            <Reveal>
-              <SectionHeading {...content.benefits} />
-            </Reveal>
-
+            <SectionHeading {...content.benefits} />
             <div className="bento-grid">
-              {content.benefits.cards.map(({ className, icon: Icon, text, title }, index) => (
-                <Reveal delay={index * 80} key={title}>
-                  <article className={`bento-card ${className}`}>
+              {content.benefits.cards.map(({ className, icon: Icon, text, title }) => (
+                <Reveal delay={60} key={title}>
+                  <article className={`bento-card ${className ?? ""}`}>
                     <span className="feature-icon">
                       <Icon />
                     </span>
@@ -460,224 +327,165 @@ export function LandingTemplate({ content, insideRegion = false, basePath = "/",
           </div>
         </section>
 
-        <section className="section deferred-section top-logo-section" id="platforms">
+        <section className="section deferred-section">
           <div className="container">
-            <Reveal>
-              <SectionHeading {...content.platforms} align="center" />
-            </Reveal>
-            <Reveal delay={120}>
-              <div className="dual-logo-strip">
-                <LogoStripRow />
-                <LogoStripRow reverse />
-              </div>
-            </Reveal>
+            <SectionHeading {...content.platforms} align="center" />
+            <LogoStripRow />
+            <LogoStripRow reverse />
           </div>
         </section>
 
-        <section className="section deferred-section trust-section">
-          <div className="container">
-            <Reveal>
-              <div className="trust-grid">
-                {content.trust.items.map((item, index) => (
-                  <div className="trust-card" key={item.label} style={{ transitionDelay: `${index * 70}ms` }}>
-                    <strong>{item.value}</strong>
-                    <span>{item.label}</span>
-                  </div>
-                ))}
-              </div>
-            </Reveal>
-
-            {content.trust.extra ? <div className="guide-grid two-column-grid market-testimonial-grid">{content.trust.extra}</div> : null}
+        <section className="section deferred-section">
+          <div className="container stats-grid trust-stats-grid">
+            {content.trust.items.map((item) => (
+              <article className="stat-card" key={item.label}>
+                <strong>{item.value}</strong>
+                <p>{item.label}</p>
+              </article>
+            ))}
           </div>
         </section>
 
         {content.authority ? (
-          <section className="section deferred-section" id="authority">
+          <section className="section deferred-section">
             <div className="container">
-              <Reveal>
-                <SectionHeading {...content.authority.header} />
-              </Reveal>
-
+              <SectionHeading {...content.authority.header} />
               <div className="authority-grid">
-                {content.authority.cards.map((card, index) => (
-                  <Reveal delay={index * 80} key={card.title}>
-                    <article className="guide-card authority-card">
-                      <h3>{card.title}</h3>
-                      <p>{card.body}</p>
-                    </article>
-                  </Reveal>
+                {content.authority.cards.map((card) => (
+                  <article className="guide-card" key={card.title}>
+                    <h3>{card.title}</h3>
+                    <p>{card.body}</p>
+                  </article>
                 ))}
               </div>
             </div>
           </section>
         ) : null}
 
-        <section className="section deferred-section library-section" id="library">
-          <div className="container">
-            <Reveal>
-              <SectionHeading {...content.library} />
-            </Reveal>
-
-            <LibraryRail />
-          </div>
-        </section>
-
         {content.comparison ? (
-          <section className="section deferred-section" id="device-comparison">
+          <section className="section deferred-section">
             <div className="container">
-              <Reveal>
-                <SectionHeading {...content.comparison.header} />
-              </Reveal>
+              <SectionHeading {...content.comparison.header} />
               <ComparisonTable section={content.comparison} />
             </div>
           </section>
         ) : null}
 
-        {content.coverage ? (
-          <section className="section deferred-section" id="coverage">
-            <div className="container">
-              <Reveal>
-                <SectionHeading {...content.coverage.header} />
-              </Reveal>
-
-              <CoverageGrid regions={content.coverage.regions} />
-            </div>
-          </section>
-        ) : null}
-
         {content.stats ? (
-          <section className="section deferred-section" id="stats">
+          <section className="section deferred-section compact-stats-section">
             <div className="container">
-              <Reveal>
-                <SectionHeading {...content.stats.header} align="center" />
-              </Reveal>
-
-              <div className="stats-grid">
-                {content.stats.items.map((item, index) => (
-                  <Reveal delay={index * 80} key={item.label}>
-                    <div className="stat-card">
-                      <strong>{typeof item.value === "number" ? <Counter value={item.value} /> : item.value}</strong>
-                      <span>{item.label}</span>
-                    </div>
-                  </Reveal>
+              <div className="stats-grid stats-grid-compact">
+                {content.stats.items.map((item) => (
+                  <article className="stat-card compact-stat-card" key={item.label}>
+                    <strong>{item.value.toLocaleString("fr-FR")}</strong>
+                    <p>{item.label}</p>
+                  </article>
                 ))}
               </div>
             </div>
           </section>
         ) : null}
 
-        <section className="section deferred-section" id="use-cases">
+        <section className="section deferred-section usage-section">
           <div className="container">
-            <Reveal>
-              <SectionHeading {...content.useCases.header} />
-            </Reveal>
+            <SectionHeading {...content.useCases.header} />
+            <div className="feature-grid is-compact">
+              {content.useCases.items.map((item) => (
+                <article className="feature-card" key={item.title}>
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
 
+        <section className="section deferred-section">
+          <div className="container">
+            <SectionHeading {...content.reliability.header} />
             <div className="feature-grid">
-              {content.useCases.items.map((card, index) => (
-                <Reveal delay={index * 80} key={card.title}>
-                  <article className="feature-card">
-                    <span className="feature-icon">
-                      <SupportIcon />
-                    </span>
-                    <h3>{card.title}</h3>
-                    <p>{card.text}</p>
-                  </article>
-                </Reveal>
+              {content.reliability.cards.map(({ icon: Icon, text, title }) => (
+                <article className="feature-card" key={title}>
+                  <span className="feature-icon">
+                    <Icon />
+                  </span>
+                  <h3>{title}</h3>
+                  <p>{text}</p>
+                </article>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="section deferred-section pricing-section" id="pricing">
+        {content.devices ? (
+          <section className="section deferred-section">
+            <div className="container">
+              <SectionHeading {...content.devices.header} />
+              <div className="footer-link-row">
+                {content.devices.badges.map((badge) => (
+                  <Link className="footer-chip" href="/devices" key={badge}>
+                    {badge}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        ) : null}
+
+        <section className="section deferred-section" id="pricing">
           <div className="container">
-            <FullPricing titleAs="h2" />
+            <FullPricing />
           </div>
         </section>
 
-        <section className="section deferred-section" id="technology">
+        <section className="section deferred-section" id="library">
           <div className="container">
-            <Reveal>
-              <SectionHeading {...content.reliability.header} />
-            </Reveal>
-
-            <div className="feature-grid">
-              {content.reliability.cards.map(({ icon: Icon, title, text }, index) => (
-                <Reveal delay={index * 70} key={title}>
-                  <article className="feature-card">
-                    <span className="feature-icon">
-                      <Icon />
-                    </span>
-                    <h3>{title}</h3>
-                    <p>{text}</p>
-                  </article>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="section deferred-section" id="devices">
-          <div className="container">
-            <Reveal>
-              <SectionHeading {...content.devices.header} align="center" />
-            </Reveal>
-
-            <div className="device-badge-grid">
-              {content.devices.badges.map((device, index) => (
-                <Reveal delay={index * 50} key={device}>
-                  <div className="supported-device">
-                    <GlobeIcon />
-                    <span>{device}</span>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
+            <SectionHeading {...content.library} />
+            <LibraryRail />
           </div>
         </section>
 
         <section className="section deferred-section" id="faq">
           <div className="container">
-            <Reveal>
-              <SectionHeading {...content.faq.header} />
-            </Reveal>
-
+            <SectionHeading {...content.faq.header} />
+            {content.faq.updateBadge ? <span className="update-badge">{content.faq.updateBadge}</span> : null}
             <FaqPanel items={content.faq.items} />
           </div>
         </section>
 
-        <section className="section deferred-section" id="contact">
-          <div className="container">
-            <Reveal>
-              <div className="contact-panel-grid two-column-grid">
-                <div className="final-cta contact-panel-copy">
-                  <div className="cta-glow" />
-                  <span className="eyebrow">{content.contact.eyebrow}</span>
-                  <h2>{content.contact.title}</h2>
-                  <p>{content.contact.text}</p>
-                  <div className="hero-actions">
-                    <a className="button button-primary" href={contactHref} target="_blank" rel="noreferrer">
-                      Contact support
-                    </a>
-                    <Link className="button button-secondary" href={pricingHref}>
-                      View plans
-                    </Link>
-                  </div>
-                </div>
-
-                <LeadCaptureForm fallbackUrl={contactHref} regionSlug={regionSlug} />
+        {content.explorer ? (
+          <section className="homepage-links" aria-label="Liens rapides WandaStream">
+            <div className="container">
+              <h2 className="section-title">{content.explorer.title}</h2>
+              <div className="links-grid">
+                {content.explorer.links.map((link) => (
+                  <Link href={link.href} className="quick-link" key={link.href}>
+                    <h3>{link.title}</h3>
+                    <p>{link.text}</p>
+                  </Link>
+                ))}
               </div>
-            </Reveal>
+            </div>
+          </section>
+        ) : null}
+
+        <section className="section deferred-section" id="contact">
+          <div className="container final-cta">
+            <div className="cta-glow" />
+            <SectionHeading eyebrow={content.contact.eyebrow} title={content.contact.title} text={content.contact.text} align="center" />
+            <div className="hero-actions" style={{ justifyContent: "center" }}>
+              <ActivateSubscriptionButton className="button button-primary" href={pricingHref} label="Voir les offres" />
+              <a className="button button-secondary" href={contactHref} target="_blank" rel="noreferrer">
+                WhatsApp
+              </a>
+            </div>
+            <LeadCaptureForm fallbackUrl={contactHref} regionSlug="france" />
           </div>
         </section>
       </main>
 
-      {insideRegion && region ? (
-        <RegionalFooter region={region} contactHref={contactHref} />
-      ) : (
-        <Footer text={content.footer.text} showRegionLinks={content.footer.showRegionLinks} regions={regions} contactHref={contactHref} />
-      )}
-
-      <WhatsAppBubble href={contactHref} label="Contact support" />
+      <Footer text={content.footer.text} note={content.footer.note} contactHref={contactHref} />
+      <WhatsAppBubble href={contactHref} label="Ouvrir WhatsApp" />
     </>
   );
 }

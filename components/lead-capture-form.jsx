@@ -3,7 +3,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { collectBrowserFingerprint, ensureTurnstileLoaded } from "@/lib/security/client-runtime";
 
-export function LeadCaptureForm({ regionSlug = "global", fallbackUrl }) {
+export function LeadCaptureForm({ regionSlug = "france", fallbackUrl }) {
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
   const widgetIdRef = useRef(null);
   const pendingTokenResolver = useRef(null);
@@ -61,7 +61,7 @@ export function LeadCaptureForm({ regionSlug = "global", fallbackUrl }) {
           }
           setFeedback({
             type: "error",
-            message: "Security verification could not be completed. Please try again."
+            message: "Nous n'avons pas pu envoyer votre demande pour le moment. Réessayez dans un instant."
           });
         }
       });
@@ -121,14 +121,18 @@ export function LeadCaptureForm({ regionSlug = "global", fallbackUrl }) {
       const payload = await response.json();
 
       if (!response.ok) {
-        throw new Error(payload.message ?? "Secure contact request failed.");
+        throw new Error(payload.message ?? "Votre demande n'a pas pu être envoyée.");
       }
 
       setFeedback({
         type: "success",
-        message: payload.message ?? "Verification complete. Continue to secure support.",
+        message: payload.message ?? "Message envoyé. Ouvrez WhatsApp pour continuer rapidement.",
         nextActionUrl: payload.nextActionUrl ?? fallbackUrl
       });
+
+      if (payload.nextActionUrl ?? fallbackUrl) {
+        window.location.href = payload.nextActionUrl ?? fallbackUrl;
+      }
 
       setFormState({
         name: "",
@@ -154,23 +158,31 @@ export function LeadCaptureForm({ regionSlug = "global", fallbackUrl }) {
   }
 
   return (
-    <div className="lead-form-shell guide-card">
+    <div className="lead-form-shell guide-card contact-section">
       <div className="section-heading">
-        <span className="eyebrow">Secure contact</span>
-        <h2>Request a verified activation path.</h2>
-        <p>Use the secure form for pricing, device validation, and support. Suspicious submissions are silently dropped.</p>
+        <span className="eyebrow">Contact</span>
+        <h2>Parlez-nous de votre appareil.</h2>
+        <p>Dites-nous si vous utilisez une Smart TV, Firestick, Android TV, iPhone ou autre. Nous vous aidons à choisir la bonne offre.</p>
       </div>
 
-      <form className="lead-form" onSubmit={handleSubmit}>
-        <div className="form-grid">
-          <label className="input-shell">
-            <span>Name</span>
-            <input required value={formState.name} onChange={(event) => updateField("name", event.target.value)} name="name" autoComplete="name" />
+      <form className="lead-form contact-form" onSubmit={handleSubmit}>
+        <div className="form-row">
+          <label className="input-shell form-group">
+            <span>Nom</span>
+            <input
+              className="form-input"
+              required
+              value={formState.name}
+              onChange={(event) => updateField("name", event.target.value)}
+              name="name"
+              autoComplete="name"
+            />
           </label>
 
-          <label className="input-shell">
-            <span>Email</span>
+          <label className="input-shell form-group">
+            <span>E-mail</span>
             <input
+              className="form-input"
               required
               type="email"
               value={formState.email}
@@ -181,30 +193,32 @@ export function LeadCaptureForm({ regionSlug = "global", fallbackUrl }) {
           </label>
         </div>
 
-        <label className="input-shell">
-          <span>Device</span>
+        <label className="input-shell form-group full-width">
+          <span>Appareil</span>
           <input
+            className="form-input"
             value={formState.device}
             onChange={(event) => updateField("device", event.target.value)}
             name="device"
-            placeholder="Firestick, Apple TV, Samsung Tizen, Android TV..."
+            placeholder="Smart TV Samsung, LG, Firestick, Android TV, iPhone..."
           />
         </label>
 
-        <label className="input-shell">
-          <span>What do you need?</span>
+        <label className="input-shell form-group full-width">
+          <span>Votre message</span>
           <textarea
+            className="form-textarea"
             required
             rows={5}
             value={formState.message}
             onChange={(event) => updateField("message", event.target.value)}
             name="message"
-            placeholder="Tell us the region, device, and whether you need pricing, setup, or support."
+            placeholder="Dites-nous ce que vous cherchez : chaînes françaises, sport, films et séries, ou aide pour l'installation."
           />
         </label>
 
         <label className="honeypot-field" htmlFor={`website-${turnstileContainerId}`}>
-          <span>Leave this field empty</span>
+          <span>Laissez ce champ vide</span>
           <input
             id={`website-${turnstileContainerId}`}
             tabIndex={-1}
@@ -215,23 +229,14 @@ export function LeadCaptureForm({ regionSlug = "global", fallbackUrl }) {
           />
         </label>
 
-        <div className="security-pills" aria-label="Security protections">
-          <span className="security-pill">Zero-trust form</span>
-          <span className="security-pill">Honeypot enabled</span>
-          <span className="security-pill">Bot fingerprinting</span>
-          <span className="security-pill">Turnstile ready</span>
-        </div>
-
-        <div className="lead-form-actions">
-          <button className="button button-primary" disabled={submitting} type="submit">
-            {submitting ? "Verifying..." : "Send secure request"}
+        <div className="lead-form-actions form-actions">
+          <button className="button button-primary btn-primary" disabled={submitting} type="submit">
+            {submitting ? "Envoi..." : "Envoyer ma demande"}
           </button>
-          <a className="button button-secondary" href={fallbackUrl} target="_blank" rel="noreferrer">
-            WhatsApp fallback
+          <a className="button button-secondary btn-secondary" href={fallbackUrl} target="_blank" rel="noreferrer">
+            WhatsApp
           </a>
         </div>
-
-        <p className="field-note">Protected by region-aware rate limiting. Bots receive a silent success response and trigger no real action.</p>
 
         {siteKey ? <div className="turnstile-shell" id={`turnstile-${turnstileContainerId}`} ref={containerRef} /> : null}
 
@@ -239,8 +244,8 @@ export function LeadCaptureForm({ regionSlug = "global", fallbackUrl }) {
           <div className={`form-feedback is-${feedback.type}`}>
             <p>{feedback.message}</p>
             {feedback.nextActionUrl ? (
-              <a className="button button-secondary" href={feedback.nextActionUrl} target="_blank" rel="noreferrer">
-                Continue to support
+              <a className="button button-secondary btn-secondary" href={feedback.nextActionUrl} target="_blank" rel="noreferrer">
+                Ouvrir WhatsApp
               </a>
             ) : null}
           </div>

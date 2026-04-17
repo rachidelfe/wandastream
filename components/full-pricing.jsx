@@ -6,27 +6,28 @@ export function FullPricing({ titleAs: TitleTag = "h2" }) {
   return (
     <>
       <div className="guide-shell">
-        <span className="eyebrow">Pricing</span>
-        <TitleTag>Tarifs WandaStream pour un abonnement IPTV Premium 4K.</TitleTag>
+        <span className="eyebrow">Tarifs</span>
+        <TitleTag>Choisissez la durée qui vous convient.</TitleTag>
         <p>
-          Comparez les durees, les reductions et les options de support avant activation. La formule Gold reste la plus populaire pour un usage
-          quotidien stable.
+          Le contenu reste simple sur toutes les offres : chaînes françaises, sport, films et séries, qualité HD / 4K selon la chaîne, et
+          assistance WhatsApp si besoin.
         </p>
+        <span className="update-badge">Tarifs mis à jour - Avril 2026</span>
       </div>
 
       <div className="pricing-grid route-pricing-grid">
         {plans.map((plan) => (
           <article className={`pricing-card${plan.popular ? " is-popular" : ""}`} key={plan.title}>
             <div className="pricing-head">
-              <span className="save-pill">{plan.discount}</span>
-              {plan.popular ? <span className="popular-pill">{plan.badge}</span> : <span className="duration-pill">{plan.duration}</span>}
+              <span className="duration-pill">{plan.duration}</span>
+              {plan.popular ? <span className="popular-pill">{plan.badge}</span> : null}
             </div>
             <div className="pricing-plan-copy">
               <h3>{plan.title}</h3>
-              <p>{plan.duration}</p>
+              <p>{plan.summary ?? plan.duration}</p>
             </div>
             <div className="price-stack">
-              <span className="old-price">{plan.oldPrice}</span>
+              {plan.oldPrice ? <span className="old-price">{plan.oldPrice}</span> : null}
               <div className="price-line">
                 <strong>{plan.price}</strong>
               </div>
@@ -43,7 +44,7 @@ export function FullPricing({ titleAs: TitleTag = "h2" }) {
               ))}
             </ul>
             <SecureCheckoutButton
-              className={`button ${plan.popular ? "button-primary" : "button-secondary"}`}
+              className="button button-primary"
               fallbackUrl={whatsappLink}
               label={plan.cta}
               planId={plan.title}
